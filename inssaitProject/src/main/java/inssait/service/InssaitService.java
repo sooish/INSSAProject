@@ -43,13 +43,11 @@ public class InssaitService {
 					Integer.parseInt(numbers.get(2).getText().replace(",", ""))));
 			// 인플루언서 게시글 url주소들 추출
 			ArrayList<String> urlList = crawl.getUrlList(loopNum);
-			System.out.println(urlList);
 
 			for (int j = 0; j < urlList.size(); j++) {
 				// 각 게시글로 이동
 				browser.get(urlList.get(j));
 				try {
-					System.out.println(targetDate);
 					// 게시글이 지정 날짜보다 최신일 경우에만
 					if (crawl.getLimit() >= targetDate) {
 						
@@ -65,15 +63,23 @@ public class InssaitService {
 								}
 							}
 						}
+						List<WebElement> places = browser.findAll("div.JF9hh > a");
+						String placeToString = "";
+						if (places.size() != 0) {
+							for (WebElement place : places) {
+								if (!place.getText().contains("@") && !place.getText().equals(null)) {
+									placeToString += place.getText();
+								}
+							}
+						}
 						System.out.println(influencerNameList.get(i));
 						System.out.println(hashTagToString);
 						System.out.println(browser.find("time").getAttribute("datetime").split("T")[0]);
-						System.out.println(browser.find("div.JF9hh > a").getText());
-
+						System.out.println(placeToString);
 						// ElasticSearch에 인플루언서 계정 아이디, 해쉬태그, 날짜, 장소태그 저장
 						es.coreInfoSaveToES(influencerNameList.get(i), hashTagToString,
 								browser.find("time").getAttribute("datetime").split("T")[0],
-								browser.find("div.JF9hh > a").getText(), j);
+								placeToString, j);
 						browser.sleep(2);
 					} else {
 						break;

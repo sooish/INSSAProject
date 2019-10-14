@@ -6,6 +6,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.springframework.context.annotation.Configuration;
 
 public class Selenium {
 	private static Selenium instance = new Selenium();
