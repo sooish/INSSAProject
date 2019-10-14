@@ -11,7 +11,7 @@ public class Selenium {
 	private static Selenium instance = new Selenium();
 	private static WebDriver driver;
 	public static final String WEB_DRIVER_ID = "webdriver.chrome.driver";
-	public static final String WEB_DRIVER_PATH = "ChromeDriver/chromedriver.exe"; // property로 대체
+	public static final String WEB_DRIVER_PATH = "ChromeDriver/chromedriver.exe";
 
 	private Selenium() {
 		System.setProperty(WEB_DRIVER_ID, WEB_DRIVER_PATH);
@@ -28,6 +28,10 @@ public class Selenium {
 	
 	public void close() {
 		driver.close();
+	}
+	
+	public void quit() {
+		driver.quit();
 	}
 	
 	public void get(String url) {

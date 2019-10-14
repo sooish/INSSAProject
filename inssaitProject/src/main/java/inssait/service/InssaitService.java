@@ -18,7 +18,7 @@ import inssait.model.domain.Influencers;
 @Service
 public class InssaitService {
 	@Autowired
-	private static InfluencersRepository ifRepo;
+	private InfluencersRepository ifRepo;
 	@Autowired
 	private MembersRepository mRepo;
 
@@ -27,13 +27,12 @@ public class InssaitService {
 	private static ElasticSearch es = ElasticSearch.getInstance();
 	private static Crawling crawl = Crawling.getInstance();
 
-	public static void getAndSaveData(String id, String pw, int loopNum, int targetDate) {
+	public void getAndSaveData(String id, String pw, Integer loopNum, Integer targetDate) {
 		// 로그인
 		crawl.login(id, pw);
-
 		// 인플루언서 아이디 리스트 추출
 		ArrayList<String> influencerNameList = crawl.getInfluencerNameList();
-		for (int i = 1; i < influencerNameList.size(); i++) {
+		for (int i = 1; i < 2; i++) {
 
 			// 인플루언서 계정 페이지로 이동
 			crawl.accessToPage(influencerNameList.get(i));
@@ -50,9 +49,10 @@ public class InssaitService {
 				// 각 게시글로 이동
 				browser.get(urlList.get(j));
 				try {
+					System.out.println(targetDate);
 					// 게시글이 지정 날짜보다 최신일 경우에만
 					if (crawl.getLimit() >= targetDate) {
-
+						
 						// 해쉬태그 추출
 						List<WebElement> hashTags = browser.findAll(".C4VMK > span > a");
 
@@ -73,19 +73,16 @@ public class InssaitService {
 						// ElasticSearch에 인플루언서 계정 아이디, 해쉬태그, 날짜, 장소태그 저장
 						es.coreInfoSaveToES(influencerNameList.get(i), hashTagToString,
 								browser.find("time").getAttribute("datetime").split("T")[0],
-								browser.find("div.JF9hh > a").getText(), i);
+								browser.find("div.JF9hh > a").getText(), j);
 						browser.sleep(2);
 					} else {
 						break;
 					}
 				} catch (Exception e) {
-				}
+				} 
 			}
 		}
-	}
-
-	public static void main(String[] args) {
-		getAndSaveData("apphj@naver.com", "rktbless", 20, 20190901);
+		browser.close();
 	}
 
 }
