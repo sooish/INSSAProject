@@ -3,16 +3,17 @@ package inssait.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
-import inssait.model.dao.InfluencersRepository;
-import inssait.model.dao.MembersRepository;
+import inssait.service.InssaitService;
 
 @RestController
 public class InssaitController {
+	
 	@Autowired
-	private InfluencersRepository ifRepo;
-	@Autowired
-	private MembersRepository mRepo;
+	private InssaitService service;
+	
 	public InssaitController(){
 		System.out.println("--- InssaitController ---");
 	}
+	
+	
 }

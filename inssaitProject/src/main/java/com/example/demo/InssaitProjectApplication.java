@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @EnableAutoConfiguration
 @SpringBootApplication
-@ComponentScan("inssait.controller")
+@ComponentScan({"inssait.controller", "inssait.service"})
 @EnableJpaRepositories(basePackages="inssait.model.dao")
 @EntityScan("inssait.model.domain")
 public class InssaitProjectApplication {
