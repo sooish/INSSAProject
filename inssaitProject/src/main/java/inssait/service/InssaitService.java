@@ -90,5 +90,10 @@ public class InssaitService {
 		}
 		browser.close();
 	}
+	
+	public ArrayList<String> getLocationList(){
+		ArrayList<String> locationList = null;
+		return locationList;
+	}
 
 }

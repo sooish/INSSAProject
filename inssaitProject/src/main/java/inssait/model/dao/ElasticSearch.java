@@ -1,6 +1,7 @@
 package inssait.model.dao;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
@@ -33,6 +34,11 @@ public class ElasticSearch {
 				.field("post-date", postDate)
 				.field("place", place).endObject());
 		IndexResponse response = client.index(request, RequestOptions.DEFAULT);
+	}
+	
+	public ArrayList<String> getLocationList(){
+		ArrayList<String> locationList = null;
+		return locationList;
 	}
 
 }
