@@ -1,8 +1,10 @@
 package inssait.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.elasticsearch.search.SearchHit;
 import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -91,9 +93,14 @@ public class InssaitService {
 		browser.close();
 	}
 	
-	public ArrayList<String> getLocationList(){
-		ArrayList<String> locationList = null;
-		return locationList;
+	public ArrayList<SearchHit[]> getLocationList(){
+		return es.getLocationList();
+	}
+	
+	public void saveLocationData(Integer esId, String addressName, String categoryGroupCode, String categoryGroupName,
+			String categoryName, String distance, String id, String phone, String placeName, String placeUrl,
+			String roadAddressName, Integer x, Integer y) throws IOException {
+		es.saveLocationData(esId, addressName, categoryGroupCode, categoryGroupName, categoryName, distance, id, phone, placeName, placeUrl, roadAddressName, x, y);
 	}
 
 }
