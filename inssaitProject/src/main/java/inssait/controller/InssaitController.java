@@ -13,35 +13,36 @@ import inssait.service.InssaitService;
 
 @RestController
 public class InssaitController {
-	
+
 	@Autowired
 	private InssaitService service;
-	
-	public InssaitController(){
+
+	public InssaitController() {
 		System.out.println("--- InssaitController ---");
 	}
-	
+
 	@GetMapping("/getAndSave")
 	public void getAndSaveData(String id, String pw, Integer loopNum, Integer targetDate) {
 		service.getAndSaveData(id, pw, loopNum, targetDate);
 	}
-	
-	@CrossOrigin(origins="http://localhost:8000")
+
+	@CrossOrigin(origins = "http://localhost:8000")
 	@GetMapping("/load")
 	public ArrayList<SearchHit[]> loadLocationKeyword() {
 		return service.getLocationList();
 	}
-	
-	@CrossOrigin(origins="http://localhost:8000")
+
+	@CrossOrigin(origins = "http://localhost:8000")
 	@GetMapping("/saveLocation")
 	public void saveLocationData(Integer esId, String addressName, String categoryGroupCode, String categoryGroupName,
 			String categoryName, String distance, String id, String phone, String placeName, String placeUrl,
-			String roadAddressName, Integer x, Integer y) {
+			String roadAddressName, String x, String y) {
 		try {
-			service.saveLocationData(esId, addressName, categoryGroupCode, categoryGroupName, categoryName, distance, id, phone, placeName, placeUrl, roadAddressName, x, y);
+			service.saveLocationData(esId, addressName, categoryGroupCode, categoryGroupName, categoryName, distance,
+					id, phone, placeName, placeUrl, roadAddressName, x, y);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 }

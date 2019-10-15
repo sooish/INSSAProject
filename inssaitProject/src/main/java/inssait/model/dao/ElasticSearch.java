@@ -60,11 +60,6 @@ public class ElasticSearch {
 		try {
 			response = client.search(request, RequestOptions.DEFAULT);
 			searchHits = response.getHits();
-//			for (int i = 0; i < searchHits.getHits().length; i++) {
-//				if(!searchHits.getHits()[i].getSourceAsString().contains("\"\"")) {
-//					locationList.add(searchHits.getHits()[i].getSourceAsString().split(":")[1].replaceAll("\"", "").replace("}", ""));
-//				}
-//			}
 			locationList.add(searchHits.getHits());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -75,7 +70,7 @@ public class ElasticSearch {
 
 	public void saveLocationData(Integer esId, String addressName, String categoryGroupCode, String categoryGroupName,
 			String categoryName, String distance, String id, String phone, String placeName, String placeUrl,
-			String roadAddressName, Integer x, Integer y) throws IOException {
+			String roadAddressName, String x, String y) throws IOException {
 		IndexRequest request = new IndexRequest("core-info", "_doc", Integer.toString(esId));
 		request.source(XContentFactory.jsonBuilder().startObject().field("address_name", addressName)
 				.field("category_group_code", categoryGroupCode).field("category_group_name", categoryGroupName).field("category_name", categoryName)

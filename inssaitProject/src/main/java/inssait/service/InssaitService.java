@@ -52,7 +52,7 @@ public class InssaitService {
 				try {
 					// 게시글이 지정 날짜보다 최신일 경우에만
 					if (crawl.getLimit() >= targetDate) {
-						
+
 						// 해쉬태그 추출
 						List<WebElement> hashTags = browser.findAll(".C4VMK > span > a");
 
@@ -80,27 +80,27 @@ public class InssaitService {
 						System.out.println(placeToString);
 						// ElasticSearch에 인플루언서 계정 아이디, 해쉬태그, 날짜, 장소태그 저장
 						es.coreInfoSaveToES(influencerNameList.get(i), hashTagToString,
-								browser.find("time").getAttribute("datetime").split("T")[0],
-								placeToString, j);
+								browser.find("time").getAttribute("datetime").split("T")[0], placeToString, j);
 						browser.sleep(2);
 					} else {
 						break;
 					}
 				} catch (Exception e) {
-				} 
+				}
 			}
 		}
 		browser.close();
 	}
-	
-	public ArrayList<SearchHit[]> getLocationList(){
+
+	public ArrayList<SearchHit[]> getLocationList() {
 		return es.getLocationList();
 	}
-	
+
 	public void saveLocationData(Integer esId, String addressName, String categoryGroupCode, String categoryGroupName,
 			String categoryName, String distance, String id, String phone, String placeName, String placeUrl,
-			String roadAddressName, Integer x, Integer y) throws IOException {
-		es.saveLocationData(esId, addressName, categoryGroupCode, categoryGroupName, categoryName, distance, id, phone, placeName, placeUrl, roadAddressName, x, y);
+			String roadAddressName, String x, String y) throws IOException {
+		es.saveLocationData(esId, addressName, categoryGroupCode, categoryGroupName, categoryName, distance, id, phone,
+				placeName, placeUrl, roadAddressName, x, y);
 	}
 
 }
