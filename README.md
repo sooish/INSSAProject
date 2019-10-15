@@ -1,11 +1,63 @@
-# Project Name
-## Inssa it
-# Team Members
-### Sookyung Kim [GitHub](https://github.com/sooish)
-### Minwoong Kang [GitHub](https://github.com/happymwkang)
-### Woongtae Kim [GitHub](https://github.com/angle2v)
-### Sunggook Choi [GitHub](https://github.com/SunggookCHOI)
-### Jongsung Kim [GitHub](https://github.com/SEJSCloud)
-# Content
-### 인싸이트 : 인플루언서 SNS(Instagram) 데이터 크롤링을 통한 핫플레이스 지도 제공 서비스
+
+# About the project
+
+소위 '핫플레이스'라 불리는 인기있는 장소로 떠오르는 지역을 소개하는 앱, '인싸이트'를 개발한다. 
+핫플레이스를 소개하되, 지금 당장이 아니라 앞으로 대중적이될 것이라 예상되는 지역들을 발굴하여 미리 알려주는 트렌드 예측 서비스를 지향한다.
+
+
+# Purpose of the project
+
+이 프로젝트를 통해 이루고자 하는 학습목표는 다음과 같다.
+
+- Selenium을 통해 SNS 데이터를 크롤링하고, 여기에서 얻은 데이터를 목적에 맞게 분류해 각각 RDBMS와 Elastic Search에 넣는다<br>
+- Spring Boot로 데이터의 크롤링과 제어할 수 있도록 프로그래밍 <br>
+- 지도 정보를  <br>
+- 구글 차트로 구현될 수 있도록 자바 언어로 프로그래밍<br>
+- 데이터를 워드클라우드로 핫플레이스 시각화하기<br>
+
+# Implications of the project
+
+핫플레이스를 정의하기 위해 우선 다방면의 트렌드 세팅에 큰 영향을 미치는 인플루언서(influencers)를 선정한다. 이들이 사고 입는 것이 잇템이 되듯 이들이 가는 곳이 핫플레레이스가 되는 경향을 반영하기 위함이다. 이를 위해 트렌드에 민감한 사람들이 주로 이용하고 트렌드에 커다란 영향을 미치는 매체로 평가받는 SNS 인스타그램에 주목하고, 그 중에서도 패션분야의 트렌드 세터라고 불리는 사람들의 패션 정보를 소개하는 '하트잇(heart.it)'의 계정을 활용하기로 한다. 구체적으로는, 하트잇이 팔로우하는 180여명의 팔루잉 계정에 들어가, 특정기간 그들이 움직인 동선을 체크하여 장소정보를 크롤링하고 이를 지도 위에 시각화해 나타낸다. 
+
+# Development Environment
+
+Window 10<br>
+Eclipse Java EE IDE for Web Developers Version: Photon Release (4.8.0)<br>
+Visual Studio Code(1.38.0)<br>
+Elastic Search
+
+# Built with
+
+```
+* RDBMS : Oracle
+* NoSQL : Elastic Search, Kibana
+* Back End Development Languages : Spring Boot / Java / / SQL
+* Front End Development Language : Java Script / HTML / CSS
+* Libraries : Lombok, Google Chart 
+* Tools : Maven / Eclipse 
+* Additional technical set : Ajax
+```
+
+# How to run it
+1. Eclipse에서 Spring boot 파일을 가동한다.
+2. 오라클 DB, 엘라스틱 서치, 키바나를 켠 상태로, html 파일을 실행하여 인스타그램 데이터 크롤링을 수행한다. 
+3. html 파일을 실행하여 지도 정보를 가져온다.
+4. 
+
+# Authors
+* **강민웅**:  [강민웅의 깃헙](https://github.com/happymwkang)
+* **김수경**:  [김수경의 깃헙](https://github.com/sooish)
+* **김웅태**:  [김웅태의 깃헙](https://github.com/angle2v)
+* **김종성**:  [김종성의 깃헙](https://github.com/SEJSCloud)
+* **최성국**:  [최성국의 깃헙](https://github.com/SunggookCHOI)
+
+
+# Images
+
+<div>
+<img src="https://user-images.githubusercontent.com/51253930/65009903-3ebe2700-d949-11e9-89d2-1ba909ac3dca.png" width="90%"></img>
+<img src="https://user-images.githubusercontent.com/51253930/65009900-3d8cfa00-d949-11e9-9ac0-2b5dd723e5de.png" width="90%"></img> 
+</div>
+
+ 
 
