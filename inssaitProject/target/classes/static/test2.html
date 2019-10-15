@@ -47,6 +47,7 @@
                         ps.keywordSearch(resData.data[0][i].sourceAsMap.place, placesSearchCB);
                         function placesSearchCB(data, status, pagination) {
                             if (status === kakao.maps.services.Status.OK) {
+                                // influencerName, hashTagToString, postDate, place
                                 array.push(data[0]);
                                 array[num].esId = resData.data[0][i].id;
                                 num++;

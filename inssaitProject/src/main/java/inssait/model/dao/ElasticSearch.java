@@ -7,10 +7,12 @@ import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.update.UpdateRequest;
+import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
-import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
@@ -49,7 +51,7 @@ public class ElasticSearch {
 		String[] excludeFields = new String[] { "post-date", "insta-id", "hashtag" };
 		searchSourceBuilder.fetchSource(includeFields, excludeFields);
 		searchSourceBuilder.from(0);
-		searchSourceBuilder.size(100);
+		searchSourceBuilder.size(10000);
 
 		SearchRequest request = new SearchRequest("core-info");
 		request.source(searchSourceBuilder);
@@ -68,20 +70,53 @@ public class ElasticSearch {
 		return locationList;
 	}
 
-	public void saveLocationData(Integer esId, String addressName, String categoryGroupCode, String categoryGroupName,
+	public void saveLocationData(String esId, String addressName, String categoryGroupCode, String categoryGroupName,
 			String categoryName, String distance, String id, String phone, String placeName, String placeUrl,
 			String roadAddressName, String x, String y) throws IOException {
-		IndexRequest request = new IndexRequest("core-info", "_doc", Integer.toString(esId));
-		request.source(XContentFactory.jsonBuilder().startObject().field("address_name", addressName)
-				.field("category_group_code", categoryGroupCode).field("category_group_name", categoryGroupName).field("category_name", categoryName)
-				.field("distance", distance).field("location_id", id).field("phone", phone)
-				.field("place_name", placeName).field("place_url", placeUrl).field("road_address_name", roadAddressName)
-				.field("x", x).field("y", y).endObject());
-		IndexResponse response = client.index(request, RequestOptions.DEFAULT);
+		XContentBuilder builder = XContentFactory.jsonBuilder().startObject().field("address_name", addressName)
+				.field("category_group_code", categoryGroupCode).field("category_group_name", categoryGroupName)
+				.field("category_name", categoryName).field("distance", distance).field("location_id", id)
+				.field("phone", phone).field("place_name", placeName).field("place_url", placeUrl)
+				.field("road_address_name", roadAddressName).field("x", x).field("y", y).endObject();
+		try {
+			UpdateRequest request = new UpdateRequest("core-info", "_doc", esId).doc(builder);
+			UpdateResponse response = client.update(request, RequestOptions.DEFAULT);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 
-//	public static void main(String[] args) {
-//		getLocationList();
-//	}
+	public SearchHit[] getLocationInfo() {
+		SearchHit[] locationInfoList = null;
+		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+		searchSourceBuilder.from(0);
+		searchSourceBuilder.size(10000);
+
+		SearchRequest request = new SearchRequest("core-info");
+		request.source(searchSourceBuilder);
+
+		SearchResponse response = null;
+		SearchHits searchHits = null;
+//		searchHits = response.getHits();
+//		for (int i = 0; i < searchHits.getHits()[0].getSourceAsString().split(",").length; i++) {
+//			mass.add(searchHits.getHits()[0].getSourceAsString().split(",")[i].split(":")[0].replace("{", "")
+//					.replace("\"", ""));
+//		} "place_url"
+
+		try {
+			response = client.search(request, RequestOptions.DEFAULT);
+			searchHits = response.getHits();
+			locationInfoList = searchHits.getHits();
+//			for(int i = 0; i < searchHits.getHits().length; i++) {
+//				if(searchHits.getHits()[i].getSourceAsString().contains("\"place_url\"")) {
+//					locationInfoList.add(searchHits.getHits());
+//				}
+//			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return locationInfoList;
+	}
 
 }

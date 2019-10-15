@@ -30,63 +30,72 @@ public class InssaitService {
 	private static Crawling crawl = Crawling.getInstance();
 
 	public void getAndSaveData(String id, String pw, Integer loopNum, Integer targetDate) {
+		int num = 0;
 		// 로그인
 		crawl.login(id, pw);
 		// 인플루언서 아이디 리스트 추출
 		ArrayList<String> influencerNameList = crawl.getInfluencerNameList();
-		for (int i = 1; i < 2; i++) {
+		influencerNameList.remove("hypebeast");
+		influencerNameList.remove("dispatch_style");
+		influencerNameList.remove("moon_choi_studio");
+		for (int i = 1; i < influencerNameList.size(); i++) {
+			try {
 
-			// 인플루언서 계정 페이지로 이동
-			crawl.accessToPage(influencerNameList.get(i));
-			List<WebElement> numbers = browser.findAll("span.g47SY ");
-			ifRepo.save(new Influencers(influencerNameList.get(i),
-					Integer.parseInt(numbers.get(0).getText().replace(",", "")),
-					Integer.parseInt(numbers.get(1).getAttribute("title").replace(",", "")),
-					Integer.parseInt(numbers.get(2).getText().replace(",", ""))));
-			// 인플루언서 게시글 url주소들 추출
-			ArrayList<String> urlList = crawl.getUrlList(loopNum);
+				// 인플루언서 계정 페이지로 이동
+				crawl.accessToPage(influencerNameList.get(i));
+				List<WebElement> numbers = browser.findAll("span.g47SY ");
+				ifRepo.save(new Influencers(influencerNameList.get(i),
+						Integer.parseInt(numbers.get(0).getText().replace(",", "")),
+						Integer.parseInt(numbers.get(1).getAttribute("title").replace(",", "")),
+						Integer.parseInt(numbers.get(2).getText().replace(",", ""))));
+				// 인플루언서 게시글 url주소들 추출
+				ArrayList<String> urlList = crawl.getUrlList(loopNum);
 
-			for (int j = 0; j < urlList.size(); j++) {
-				// 각 게시글로 이동
-				browser.get(urlList.get(j));
-				try {
-					// 게시글이 지정 날짜보다 최신일 경우에만
-					if (crawl.getLimit() >= targetDate) {
+				for (int j = 0; j < urlList.size(); j++) {
+					// 각 게시글로 이동
 
-						// 해쉬태그 추출
-						List<WebElement> hashTags = browser.findAll(".C4VMK > span > a");
+					browser.get(urlList.get(j));
+					try {
+						// 게시글이 지정 날짜보다 최신일 경우에만
+						if (crawl.getLimit() >= targetDate) {
 
-						// 추출한 해쉬태그 스트링 하나에 붙여넣기
-						String hashTagToString = "";
-						if (hashTags.size() != 0) {
-							for (WebElement hashTag : hashTags) {
-								if (!hashTag.getText().contains("@") && !hashTag.getText().equals(null)) {
-									hashTagToString += hashTag.getText();
+							// 해쉬태그 추출
+							List<WebElement> hashTags = browser.findAll(".C4VMK > span > a");
+
+							// 추출한 해쉬태그 스트링 하나에 붙여넣기
+							String hashTagToString = "";
+							if (hashTags.size() != 0) {
+								for (WebElement hashTag : hashTags) {
+									if (!hashTag.getText().contains("@") && !hashTag.getText().equals(null)) {
+										hashTagToString += hashTag.getText();
+									}
 								}
 							}
-						}
-						List<WebElement> places = browser.findAll("div.JF9hh > a");
-						String placeToString = "";
-						if (places.size() != 0) {
-							for (WebElement place : places) {
-								if (!place.getText().contains("@") && !place.getText().equals(null)) {
-									placeToString += place.getText();
+							List<WebElement> places = browser.findAll("div.JF9hh > a");
+							String placeToString = "";
+							if (places.size() != 0) {
+								for (WebElement place : places) {
+									if (!place.getText().contains("@") && !place.getText().equals(null)) {
+										placeToString += place.getText();
+									}
 								}
 							}
+							System.out.println(influencerNameList.get(i));
+							System.out.println(hashTagToString);
+							System.out.println(browser.find("time").getAttribute("datetime").split("T")[0]);
+							System.out.println(placeToString);
+							// ElasticSearch에 인플루언서 계정 아이디, 해쉬태그, 날짜, 장소태그 저장
+							es.coreInfoSaveToES(influencerNameList.get(i), hashTagToString,
+									browser.find("time").getAttribute("datetime").split("T")[0], placeToString, ++num);
+							browser.sleep(2);
+						} else {
+							break;
 						}
-						System.out.println(influencerNameList.get(i));
-						System.out.println(hashTagToString);
-						System.out.println(browser.find("time").getAttribute("datetime").split("T")[0]);
-						System.out.println(placeToString);
-						// ElasticSearch에 인플루언서 계정 아이디, 해쉬태그, 날짜, 장소태그 저장
-						es.coreInfoSaveToES(influencerNameList.get(i), hashTagToString,
-								browser.find("time").getAttribute("datetime").split("T")[0], placeToString, j);
-						browser.sleep(2);
-					} else {
-						break;
+					} catch (Exception e) {
 					}
-				} catch (Exception e) {
 				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 		browser.close();
@@ -96,11 +105,15 @@ public class InssaitService {
 		return es.getLocationList();
 	}
 
-	public void saveLocationData(Integer esId, String addressName, String categoryGroupCode, String categoryGroupName,
+	public void saveLocationData(String esId, String addressName, String categoryGroupCode, String categoryGroupName,
 			String categoryName, String distance, String id, String phone, String placeName, String placeUrl,
 			String roadAddressName, String x, String y) throws IOException {
 		es.saveLocationData(esId, addressName, categoryGroupCode, categoryGroupName, categoryName, distance, id, phone,
 				placeName, placeUrl, roadAddressName, x, y);
+	}
+	
+	public SearchHit[] getLocationInfo() {
+		return es.getLocationInfo();
 	}
 
 }

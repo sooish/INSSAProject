@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import inssait.service.InssaitService;
 
+@CrossOrigin(origins = "http://localhost:8000")
 @RestController
 public class InssaitController {
 
@@ -26,15 +27,13 @@ public class InssaitController {
 		service.getAndSaveData(id, pw, loopNum, targetDate);
 	}
 
-	@CrossOrigin(origins = "http://localhost:8000")
 	@GetMapping("/load")
 	public ArrayList<SearchHit[]> loadLocationKeyword() {
 		return service.getLocationList();
 	}
 
-	@CrossOrigin(origins = "http://localhost:8000")
 	@GetMapping("/saveLocation")
-	public void saveLocationData(Integer esId, String addressName, String categoryGroupCode, String categoryGroupName,
+	public void saveLocationData(String esId, String addressName, String categoryGroupCode, String categoryGroupName,
 			String categoryName, String distance, String id, String phone, String placeName, String placeUrl,
 			String roadAddressName, String x, String y) {
 		try {
@@ -43,6 +42,11 @@ public class InssaitController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	@GetMapping("/getLocationInfo")
+	public SearchHit[] getLocationInfo() {
+		return service.getLocationInfo();
 	}
 
 }
