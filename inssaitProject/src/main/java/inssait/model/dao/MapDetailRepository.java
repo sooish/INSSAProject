@@ -1,0 +1,83 @@
+package inssait.model.dao;
+
+import java.io.IOException;
+
+import org.elasticsearch.action.index.IndexRequest;
+import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.action.search.SearchRequest;
+import org.elasticsearch.action.update.UpdateRequest;
+import org.elasticsearch.action.update.UpdateResponse;
+import org.elasticsearch.client.RequestOptions;
+import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.common.xcontent.XContentBuilder;
+import org.elasticsearch.common.xcontent.XContentFactory;
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.elasticsearch.client.ClientConfiguration;
+import org.springframework.data.elasticsearch.client.RestClients;
+
+import inssait.model.domain.MapDetail;
+
+@Configuration
+public class MapDetailRepository {
+	@Bean
+	public static RestHighLevelClient client() {
+		ClientConfiguration clientConfiguration = ClientConfiguration.builder().connectedTo("localhost:9200").build();
+		return RestClients.create(clientConfiguration).rest();
+	}
+
+	private static RestHighLevelClient client = client();
+	private static MapDetailRepository instance = new MapDetailRepository();
+
+	public static MapDetailRepository getInstance() {
+		return instance;
+	}
+
+	public void coreInfoSaveToES(MapDetail mapDetail, int loopNum) throws IOException {
+		IndexRequest request = new IndexRequest("core-info", "_doc", Integer.toString(loopNum + 1));
+		request.source(XContentFactory.jsonBuilder().startObject().field("insta-id", mapDetail.getInfluencerName())
+				.field("hashtag", mapDetail.getHashTagToString()).field("post-date", mapDetail.getPostDate())
+				.field("place", mapDetail.getPlace()).endObject());
+		IndexResponse response = client.index(request, RequestOptions.DEFAULT);
+	}
+
+	public SearchHit[] getLocationList() throws IOException {
+		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+		String[] includeFields = new String[] { "place" };
+		String[] excludeFields = new String[] { "post-date", "insta-id", "hashtag" };
+		searchSourceBuilder.fetchSource(includeFields, excludeFields);
+		searchSourceBuilder.from(0);
+		searchSourceBuilder.size(10000);
+
+		SearchRequest request = new SearchRequest("core-info");
+		request.source(searchSourceBuilder);
+		return client.search(request, RequestOptions.DEFAULT).getHits().getHits();
+	}
+
+	public void saveLocationData(MapDetail mapDetail) throws IOException {
+		XContentBuilder builder = XContentFactory.jsonBuilder().startObject()
+				.field("address_name", mapDetail.getAddressName())
+				.field("category_group_code", mapDetail.getCategoryGroupCode())
+				.field("category_group_name", mapDetail.getCategoryGroupName())
+				.field("category_name", mapDetail.getCategoryName()).field("distance", mapDetail.getDistance())
+				.field("location_id", mapDetail.getId()).field("phone", mapDetail.getPhone())
+				.field("place_name", mapDetail.getPlaceName()).field("place_url", mapDetail.getPlaceUrl())
+				.field("road_address_name", mapDetail.getRoadAddressName()).field("x", mapDetail.getX())
+				.field("y", mapDetail.getY()).endObject();
+		UpdateRequest request = new UpdateRequest("core-info", "_doc", mapDetail.getEsId()).doc(builder);
+		UpdateResponse response = client.update(request, RequestOptions.DEFAULT);
+	}
+
+	public SearchHit[] getLocationInfo() throws IOException {
+		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+		searchSourceBuilder.from(0);
+		searchSourceBuilder.size(10000);
+
+		SearchRequest request = new SearchRequest("core-info");
+		request.source(searchSourceBuilder);
+		return client.search(request, RequestOptions.DEFAULT).getHits().getHits();
+	}
+
+}

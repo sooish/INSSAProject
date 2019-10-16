@@ -12,10 +12,11 @@ import org.springframework.stereotype.Service;
 
 import inssait.crawling.Crawling;
 import inssait.crawling.Selenium;
-import inssait.model.dao.ElasticSearch;
+import inssait.model.dao.MapDetailRepository;
 import inssait.model.dao.InfluencersRepository;
 import inssait.model.dao.MembersRepository;
 import inssait.model.domain.Influencers;
+import inssait.model.domain.MapDetail;
 
 @Service
 public class InssaitService {
@@ -26,10 +27,10 @@ public class InssaitService {
 
 	// 싱글톤 코드 없애고 autowired 적용해야할것 같습니다
 	private static Selenium browser = Selenium.getInstance();
-	private static ElasticSearch es = ElasticSearch.getInstance();
+	private static MapDetailRepository es = MapDetailRepository.getInstance();
 	private static Crawling crawl = Crawling.getInstance();
 
-	public void getAndSaveData(String id, String pw, Integer loopNum, Integer targetDate) {
+	public void getAndSaveData(String id, String pw, Integer loopNum, Integer targetDate) throws Exception {
 		int num = 0;
 		// 로그인
 		crawl.login(id, pw);
@@ -85,8 +86,11 @@ public class InssaitService {
 							System.out.println(browser.find("time").getAttribute("datetime").split("T")[0]);
 							System.out.println(placeToString);
 							// ElasticSearch에 인플루언서 계정 아이디, 해쉬태그, 날짜, 장소태그 저장
-							es.coreInfoSaveToES(influencerNameList.get(i), hashTagToString,
-									browser.find("time").getAttribute("datetime").split("T")[0], placeToString, ++num);
+//							influencerNameList.get(i), hashTagToString,
+//							browser.find("time").getAttribute("datetime").split("T")[0], placeToString
+							es.coreInfoSaveToES(
+									new MapDetail(influencerNameList.get(i), hashTagToString,
+											browser.find("time").getAttribute("datetime").split("T")[0], placeToString),++num);
 							browser.sleep(2);
 						} else {
 							break;
@@ -101,18 +105,16 @@ public class InssaitService {
 		browser.close();
 	}
 
-	public ArrayList<SearchHit[]> getLocationList() {
+	public SearchHit[] getLocationList() throws IOException {
 		return es.getLocationList();
 	}
 
-	public void saveLocationData(String esId, String addressName, String categoryGroupCode, String categoryGroupName,
-			String categoryName, String distance, String id, String phone, String placeName, String placeUrl,
-			String roadAddressName, String x, String y) throws IOException {
-		es.saveLocationData(esId, addressName, categoryGroupCode, categoryGroupName, categoryName, distance, id, phone,
-				placeName, placeUrl, roadAddressName, x, y);
+	public void saveLocationData(MapDetail mapDetail) throws IOException {
+		es.saveLocationData(new MapDetail(mapDetail.getEsId(), mapDetail.getAddressName(), mapDetail.getCategoryGroupCode(), mapDetail.getCategoryGroupName(), mapDetail.getCategoryName(), mapDetail.getDistance(), mapDetail.getId(), mapDetail.getPhone(),
+				mapDetail.getPlaceName(), mapDetail.getPlaceUrl(), mapDetail.getRoadAddressName(), mapDetail.getX(), mapDetail.getY()));
 	}
-	
-	public SearchHit[] getLocationInfo() {
+
+	public SearchHit[] getLocationInfo() throws IOException {
 		return es.getLocationInfo();
 	}
 

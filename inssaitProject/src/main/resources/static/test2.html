@@ -40,16 +40,16 @@
             axios.get("http://127.0.0.1:8000/load")
                 .then(resData => {
                     console.log(resData.data);
-                    for (let i = 0; i < resData.data[0].length; i++) {
+                    for (let i = 0; i < resData.data.length; i++) {
                         // 장소 검색 객체를 생성합니다
                         var ps = new kakao.maps.services.Places();
                         var num = 0;
-                        ps.keywordSearch(resData.data[0][i].sourceAsMap.place, placesSearchCB);
+                        ps.keywordSearch(resData.data[i].sourceAsMap.place, placesSearchCB);
                         function placesSearchCB(data, status, pagination) {
                             if (status === kakao.maps.services.Status.OK) {
                                 // influencerName, hashTagToString, postDate, place
                                 array.push(data[0]);
-                                array[num].esId = resData.data[0][i].id;
+                                array[num].esId = resData.data[i].id;
                                 num++;
                             }
                         }
