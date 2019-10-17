@@ -24,13 +24,12 @@ public class InssaitService {
 	private InfluencersRepository ifRepo;
 	@Autowired
 	private MembersRepository mRepo;
-
-	// 싱글톤 코드 없애고 autowired 적용해야할것 같습니다
-	private static Selenium browser = Selenium.getInstance();
+	
 	private static MapDetailRepository es = MapDetailRepository.getInstance();
-	private static Crawling crawl = Crawling.getInstance();
 
 	public void getAndSaveData(String id, String pw, Integer loopNum, Integer targetDate) throws Exception {
+		Selenium browser = Selenium.getInstance();
+		Crawling crawl = Crawling.getInstance();
 		int num = 0;
 		// 로그인
 		crawl.login(id, pw);

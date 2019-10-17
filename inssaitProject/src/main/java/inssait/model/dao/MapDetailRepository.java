@@ -23,12 +23,11 @@ import inssait.model.domain.MapDetail;
 @Configuration
 public class MapDetailRepository {
 	@Bean
-	public static RestHighLevelClient client() {
+	public RestHighLevelClient client() {
 		ClientConfiguration clientConfiguration = ClientConfiguration.builder().connectedTo("localhost:9200").build();
 		return RestClients.create(clientConfiguration).rest();
 	}
 
-	private static RestHighLevelClient client = client();
 	private static MapDetailRepository instance = new MapDetailRepository();
 
 	public static MapDetailRepository getInstance() {
@@ -36,48 +35,72 @@ public class MapDetailRepository {
 	}
 
 	public void coreInfoSaveToES(MapDetail mapDetail, int loopNum) throws IOException {
-		IndexRequest request = new IndexRequest("core-info", "_doc", Integer.toString(loopNum + 1));
-		request.source(XContentFactory.jsonBuilder().startObject().field("insta-id", mapDetail.getInfluencerName())
-				.field("hashtag", mapDetail.getHashTagToString()).field("post-date", mapDetail.getPostDate())
-				.field("place", mapDetail.getPlace()).endObject());
-		IndexResponse response = client.index(request, RequestOptions.DEFAULT);
+		RestHighLevelClient client = client();
+		try {
+			IndexRequest request = new IndexRequest("core-info", "_doc", Integer.toString(loopNum + 1));
+			request.source(XContentFactory.jsonBuilder().startObject().field("insta-id", mapDetail.getInfluencerName())
+					.field("hashtag", mapDetail.getHashTagToString()).field("post-date", mapDetail.getPostDate())
+					.field("place", mapDetail.getPlace()).endObject());
+			IndexResponse response = client.index(request, RequestOptions.DEFAULT);
+		} finally {
+			client.close();
+		}
 	}
 
 	public SearchHit[] getLocationList() throws IOException {
-		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-		String[] includeFields = new String[] { "place" };
-		String[] excludeFields = new String[] { "post-date", "insta-id", "hashtag" };
-		searchSourceBuilder.fetchSource(includeFields, excludeFields);
-		searchSourceBuilder.from(0);
-		searchSourceBuilder.size(10000);
-
-		SearchRequest request = new SearchRequest("core-info");
-		request.source(searchSourceBuilder);
-		return client.search(request, RequestOptions.DEFAULT).getHits().getHits();
+		RestHighLevelClient client = client();
+		SearchHit[] searchHit = null;
+		try {
+			SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+			String[] includeFields = new String[] { "place" };
+			String[] excludeFields = new String[] { "post-date", "insta-id", "hashtag" };
+			searchSourceBuilder.fetchSource(includeFields, excludeFields);
+			searchSourceBuilder.from(0);
+			searchSourceBuilder.size(10000);
+			
+			SearchRequest request = new SearchRequest("core-info");
+			request.source(searchSourceBuilder);
+			searchHit = client.search(request, RequestOptions.DEFAULT).getHits().getHits();
+		} finally {
+			client.close();
+		}
+		return searchHit;
 	}
 
 	public void saveLocationData(MapDetail mapDetail) throws IOException {
-		XContentBuilder builder = XContentFactory.jsonBuilder().startObject()
-				.field("address_name", mapDetail.getAddressName())
-				.field("category_group_code", mapDetail.getCategoryGroupCode())
-				.field("category_group_name", mapDetail.getCategoryGroupName())
-				.field("category_name", mapDetail.getCategoryName()).field("distance", mapDetail.getDistance())
-				.field("location_id", mapDetail.getId()).field("phone", mapDetail.getPhone())
-				.field("place_name", mapDetail.getPlaceName()).field("place_url", mapDetail.getPlaceUrl())
-				.field("road_address_name", mapDetail.getRoadAddressName()).field("x", mapDetail.getX())
-				.field("y", mapDetail.getY()).endObject();
-		UpdateRequest request = new UpdateRequest("core-info", "_doc", mapDetail.getEsId()).doc(builder);
-		UpdateResponse response = client.update(request, RequestOptions.DEFAULT);
+		RestHighLevelClient client = client();
+		try {
+			XContentBuilder builder = XContentFactory.jsonBuilder().startObject()
+					.field("address_name", mapDetail.getAddressName())
+					.field("category_group_code", mapDetail.getCategoryGroupCode())
+					.field("category_group_name", mapDetail.getCategoryGroupName())
+					.field("category_name", mapDetail.getCategoryName()).field("distance", mapDetail.getDistance())
+					.field("location_id", mapDetail.getId()).field("phone", mapDetail.getPhone())
+					.field("place_name", mapDetail.getPlaceName()).field("place_url", mapDetail.getPlaceUrl())
+					.field("road_address_name", mapDetail.getRoadAddressName()).field("x", mapDetail.getX())
+					.field("y", mapDetail.getY()).endObject();
+			UpdateRequest request = new UpdateRequest("core-info", "_doc", mapDetail.getEsId()).doc(builder);
+			UpdateResponse response = client.update(request, RequestOptions.DEFAULT);
+		} finally {
+			client.close();
+		}
 	}
 
 	public SearchHit[] getLocationInfo() throws IOException {
-		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-		searchSourceBuilder.from(0);
-		searchSourceBuilder.size(10000);
+		RestHighLevelClient client = client();
+		SearchHit[] searchHit = null;
+		try {
+			SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+			searchSourceBuilder.from(0);
+			searchSourceBuilder.size(10000);
 
-		SearchRequest request = new SearchRequest("core-info");
-		request.source(searchSourceBuilder);
-		return client.search(request, RequestOptions.DEFAULT).getHits().getHits();
+			SearchRequest request = new SearchRequest("core-info");
+			request.source(searchSourceBuilder);
+			searchHit = client.search(request, RequestOptions.DEFAULT).getHits().getHits();
+		} finally {
+			client.close();
+		}
+		return searchHit;
 	}
 
 }
