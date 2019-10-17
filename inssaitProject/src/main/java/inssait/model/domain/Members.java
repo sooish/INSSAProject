@@ -22,4 +22,13 @@ public class Members {
 	private String gender;
 	private String instaId;
 	
+	public Members(String memberId, String pw, String location, String address, String birthday, String gender) {
+		this.memberId = memberId;
+		this.pw = pw;
+		this.location = location;
+		this.address = address;
+		this.birthday = birthday;
+		this.gender = gender;
+	}
+	
 }

@@ -41,7 +41,7 @@ public class MapDetailRepository {
 			request.source(XContentFactory.jsonBuilder().startObject().field("insta-id", mapDetail.getInfluencerName())
 					.field("hashtag", mapDetail.getHashTagToString()).field("post-date", mapDetail.getPostDate())
 					.field("place", mapDetail.getPlace()).endObject());
-			IndexResponse response = client.index(request, RequestOptions.DEFAULT);
+			client.index(request, RequestOptions.DEFAULT);
 		} finally {
 			client.close();
 		}
@@ -80,7 +80,7 @@ public class MapDetailRepository {
 					.field("road_address_name", mapDetail.getRoadAddressName()).field("x", mapDetail.getX())
 					.field("y", mapDetail.getY()).endObject();
 			UpdateRequest request = new UpdateRequest("core-info", "_doc", mapDetail.getEsId()).doc(builder);
-			UpdateResponse response = client.update(request, RequestOptions.DEFAULT);
+			client.update(request, RequestOptions.DEFAULT);
 		} finally {
 			client.close();
 		}

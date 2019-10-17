@@ -3,6 +3,7 @@ package inssait.service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.elasticsearch.search.SearchHit;
 import org.openqa.selenium.WebElement;
@@ -17,6 +18,7 @@ import inssait.model.dao.InfluencersRepository;
 import inssait.model.dao.MembersRepository;
 import inssait.model.domain.Influencers;
 import inssait.model.domain.MapDetail;
+import inssait.model.domain.Members;
 
 @Service
 public class InssaitService {
@@ -24,9 +26,10 @@ public class InssaitService {
 	private InfluencersRepository ifRepo;
 	@Autowired
 	private MembersRepository mRepo;
-	
+
 	private static MapDetailRepository es = MapDetailRepository.getInstance();
 
+	// 크롤링 해서 오라클, 엘라스틱서치에 정보 저장
 	public void getAndSaveData(String id, String pw, Integer loopNum, Integer targetDate) throws Exception {
 		Selenium browser = Selenium.getInstance();
 		Crawling crawl = Crawling.getInstance();
@@ -80,16 +83,10 @@ public class InssaitService {
 									}
 								}
 							}
-							System.out.println(influencerNameList.get(i));
-							System.out.println(hashTagToString);
-							System.out.println(browser.find("time").getAttribute("datetime").split("T")[0]);
-							System.out.println(placeToString);
-							// ElasticSearch에 인플루언서 계정 아이디, 해쉬태그, 날짜, 장소태그 저장
-//							influencerNameList.get(i), hashTagToString,
-//							browser.find("time").getAttribute("datetime").split("T")[0], placeToString
 							es.coreInfoSaveToES(
 									new MapDetail(influencerNameList.get(i), hashTagToString,
-											browser.find("time").getAttribute("datetime").split("T")[0], placeToString),++num);
+											browser.find("time").getAttribute("datetime").split("T")[0], placeToString),
+									++num);
 							browser.sleep(2);
 						} else {
 							break;
@@ -104,17 +101,43 @@ public class InssaitService {
 		browser.close();
 	}
 
+	// 엘라스틱서치와 연동, 정보 가져오고 저장
 	public SearchHit[] getLocationList() throws IOException {
 		return es.getLocationList();
 	}
 
 	public void saveLocationData(MapDetail mapDetail) throws IOException {
-		es.saveLocationData(new MapDetail(mapDetail.getEsId(), mapDetail.getAddressName(), mapDetail.getCategoryGroupCode(), mapDetail.getCategoryGroupName(), mapDetail.getCategoryName(), mapDetail.getDistance(), mapDetail.getId(), mapDetail.getPhone(),
-				mapDetail.getPlaceName(), mapDetail.getPlaceUrl(), mapDetail.getRoadAddressName(), mapDetail.getX(), mapDetail.getY()));
+		es.saveLocationData(new MapDetail(mapDetail.getEsId(), mapDetail.getAddressName(),
+				mapDetail.getCategoryGroupCode(), mapDetail.getCategoryGroupName(), mapDetail.getCategoryName(),
+				mapDetail.getDistance(), mapDetail.getId(), mapDetail.getPhone(), mapDetail.getPlaceName(),
+				mapDetail.getPlaceUrl(), mapDetail.getRoadAddressName(), mapDetail.getX(), mapDetail.getY()));
 	}
 
 	public SearchHit[] getLocationInfo() throws IOException {
 		return es.getLocationInfo();
+	}
+
+	// ======================================================
+
+	// 회원가입 로직
+	public boolean signUp(Members member) {
+		boolean result = false;
+		if (mRepo.save(new Members(member.getMemberId(), member.getPw(), member.getLocation(), member.getAddress(),
+				member.getBirthday(), member.getGender())) != null) {
+			result = true;
+		}
+		return result;
+	}
+
+	// 로그인 로직
+	public boolean login(Members member) {
+		boolean result = false;
+		System.out.println(mRepo.findAll());
+		System.out.println(mRepo.findById(member.getMemberId()).get().getPw());
+		if (mRepo.findById(member.getMemberId()).get().getPw().equals(member.getPw())) {
+			result = true;
+		}
+		return result;
 	}
 
 }
