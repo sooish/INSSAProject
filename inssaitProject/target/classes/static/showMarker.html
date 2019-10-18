@@ -3,8 +3,13 @@
 
 <head>
     <meta charset="utf-8">
-    <title>여러개 마커 표시하기</title>
+    <title>IN-SSAIT</title>
     <style>
+        div.field,
+        select.box {
+            text-align: center;
+        }
+
         .customoverlay {
             position: relative;
             bottom: 85px;
@@ -53,12 +58,25 @@
             background: url('http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')
         }
     </style>
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#headers").load("nav.html");
+        });
+    </script>
 </head>
 
 <body>
-    <button onclick="insertMarkers()">그리기</button>
-    <div id="map" style="width:100%;height:350px;"></div>
-
+    <div id="headers"></div>
+    <br><br><br><br><br>
+    <div id="search" class="field">
+        지역검색 : <input type="text" id="locationName"><br>
+        시작날짜지정 : <input type="date" id="date1"><br>
+        종료날짜지정 : <input type="date" id="date2"><br><br>
+        <button onclick="search()">검색</button><br><br>
+    </div>
+    <div id="map" style="width:60%;height:350px;margin : 0 auto;" class="field"></div>
+    <div class="field"><br>inSSa-it의 인싸들이 방문하는 핫플레이스 지도입니다. CLICK!</div>
     <script type="text/javascript"
         src="//dapi.kakao.com/v2/maps/sdk.js?appkey=00f87dfc64daeb277224676ae0cf3f88&libraries=services"></script>
 
@@ -67,72 +85,154 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
         var array = [];
-        function insertMarkers() {
-            axios.get("http://127.0.0.1:8000/getLocationInfo")
-                .then(resData => {
-                    for (let i = 0; i < resData.data.length; i++) {
-                        if (Object.keys(resData.data[i].sourceAsMap).includes("place_url")) {
-                            array.push(resData.data[i].sourceAsMap);
-                        }
+        axios.get("http://127.0.0.1:8000/getLocationInfo")
+            .then(resData => {
+                for (let i = 0; i < resData.data.length; i++) {
+                    if (Object.keys(resData.data[i].sourceAsMap).includes("place_url")) {
+                        array.push(resData.data[i].sourceAsMap);
                     }
-                    console.log(array);
-                    var mapContainer = document.getElementById('map'), // 지도를 표시할 div  
-                        mapOption = {
-                            center: new kakao.maps.LatLng(37.5670399093241, 126.875607758973), // 지도의 중심좌표
-                            level: 14 // 지도의 확대 레벨
-                        };
+                }
+                console.log(array);
+                var mapContainer = document.getElementById('map'), // 지도를 표시할 div  
+                    mapOption = {
+                        center: new kakao.maps.LatLng(37.5670399093241, 126.875607758973), // 지도의 중심좌표
+                        level: 14 // 지도의 확대 레벨
+                    };
 
-                    var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+                var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
 
-                    // 마커 이미지의 이미지 주소입니다
-                    var imageSrc = "http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
-                        
-                    array.forEach(element => {
+                // 마커 이미지의 이미지 주소입니다
+                var imageSrc = "http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
 
-                        // 마커 이미지의 이미지 크기 입니다
-                        var imageSize = new kakao.maps.Size(30, 40);
+                array.forEach(element => {
 
-                        // 마커 이미지를 생성합니다    
-                        var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+                    // 마커 이미지의 이미지 크기 입니다
+                    var imageSize = new kakao.maps.Size(30, 40);
 
-                        // 마커를 생성합니다
-                        var marker = new kakao.maps.Marker({
-                            map: map,
-                            position: new kakao.maps.LatLng(element.y, element.x),
-                            title: element.place_name,
-                            image: markerImage
-                        });
-                        var content = '<div class="customoverlay">' +
-                            '  <a href="https://www.instagram.com/explore/tags/' + element.place_name + '" target="_blank">' +
-                            '    <span class="title">' + element.place_name + '</span>' +
-                            '  </a>' +
-                            '</div>';
+                    // 마커 이미지를 생성합니다    
+                    var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
 
-                        // 커스텀 오버레이가 표시될 위치입니다 
-                        var position = new kakao.maps.LatLng(element.y, element.x);
+                    // 마커를 생성합니다
+                    var marker = new kakao.maps.Marker({
+                        map: map,
+                        position: new kakao.maps.LatLng(element.y, element.x),
+                        title: element.place_name,
+                        image: markerImage
+                    });
+                    var content = '<div class="customoverlay">' +
+                        '  <a href="https://www.instagram.com/explore/tags/' + element.place_name + '" target="_blank">' +
+                        '    <span class="title">' + element.place_name + '</span>' +
+                        '  </a>' +
+                        '</div>';
 
-                        // 커스텀 오버레이를 생성합니다
-                        var overlay = new kakao.maps.CustomOverlay({
-                            content: content,
-                            map: map,
-                            position: marker.getPosition()
-                        });
-                        kakao.maps.event.addListener(marker, 'click', function(mouseEvent) {
-                            if(overlay.getMap() == null){
-                                overlay.setMap(map);
-                            }else{
-                                overlay.setMap(null);
-                            }
-                        });
-                        overlay.setMap(null);
-                    })
+                    // 커스텀 오버레이가 표시될 위치입니다 
+                    var position = new kakao.maps.LatLng(element.y, element.x);
+
+                    // 커스텀 오버레이를 생성합니다
+                    var overlay = new kakao.maps.CustomOverlay({
+                        content: content,
+                        map: map,
+                        position: marker.getPosition()
+                    });
+
+
+                    kakao.maps.event.addListener(marker, 'click', function (mouseEvent) {
+                        if (overlay.getMap() == null) {
+                            overlay.setMap(map);
+                            document.getElementById("locationName").value = overlay.a.innerText;
+                        } else {
+                            overlay.setMap(null);
+                        }
+                    });
+                    overlay.setMap(null);
                 })
-                .catch(error => {
-                    console.log("비정상 응답 ", error);
+
+
+            })
+            .catch(error => {
+                console.log("비정상 응답 ", error);
+            });
+
+        function search(location, date1, date2) {
+            if(document.getElementById("locationName").value == ""){
+                location = " ";
+            }else{
+                location = document.getElementById("locationName").value;
+            }
+            if(document.getElementById("date1").value == ""){
+                date1 = 0;
+            }else{
+                date1 = document.getElementById("date1").value.replace("-", "").replace("-", "");
+            }
+            if(document.getElementById("date2").value == ""){
+                date2 = 30000000;
+            }else{
+                date2 = document.getElementById("date2").value.replace("-", "").replace("-", "");
+            }
+            let lArray = [];
+            array.forEach(element => {
+                if (element.address_name.includes(location)
+                && date1 < element['post-date'].replace("-", "").replace("-", "") 
+                && date2 > element['post-date'].replace("-", "").replace("-", "")) {
+                    lArray.push(element);
+                }
+            });
+            console.log(lArray)
+            document.getElementById('map').innerHTML = "<span></span>"
+            var mapContainer = document.getElementById('map'), // 지도를 표시할 div  
+                mapOption = {
+                    center: new kakao.maps.LatLng(37.5670399093241, 126.875607758973), // 지도의 중심좌표
+                    level: 14 // 지도의 확대 레벨
+                };
+
+            var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+
+            // 마커 이미지의 이미지 주소입니다
+            var imageSrc = "http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
+
+            lArray.forEach(element => {
+
+                // 마커 이미지의 이미지 크기 입니다
+                var imageSize = new kakao.maps.Size(30, 40);
+
+                // 마커 이미지를 생성합니다    
+                var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+
+                // 마커를 생성합니다
+                var marker = new kakao.maps.Marker({
+                    map: map,
+                    position: new kakao.maps.LatLng(element.y, element.x),
+                    title: element.place_name,
+                    image: markerImage
                 });
+                var content = '<div class="customoverlay">' +
+                    '  <a href="https://www.instagram.com/explore/tags/' + element.place_name + '" target="_blank">' +
+                    '    <span class="title">' + element.place_name + '</span>' +
+                    '  </a>' +
+                    '</div>';
+
+                // 커스텀 오버레이가 표시될 위치입니다 
+                var position = new kakao.maps.LatLng(element.y, element.x);
+
+                // 커스텀 오버레이를 생성합니다
+                var overlay = new kakao.maps.CustomOverlay({
+                    content: content,
+                    map: map,
+                    position: marker.getPosition()
+                });
+
+
+                kakao.maps.event.addListener(marker, 'click', function (mouseEvent) {
+                    if (overlay.getMap() == null) {
+                        overlay.setMap(map);
+                        document.getElementById("locationName").value = overlay.a.innerText;
+                    } else {
+                        overlay.setMap(null);
+                    }
+                });
+                overlay.setMap(null);
+            })
         }
-
-
     </script>
 </body>
 

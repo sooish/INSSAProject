@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
+<title>IN-SSAIT</title>
 <style>
 body {
   font-family: 'Lato', sans-serif;
@@ -23,18 +24,20 @@ body {
 }
 
 /* Full-width input fields */
-input[type=text], input[type=password] {
+input[type=text], input[type=password], input[type=date] {
   width: 100%;
   padding: 13px;
   margin: 3px 0 3px 0;
   display: inline-block;
   border: none;
   background: #f1f1f1;
+  text-align: center;
 }
 
-input[type=text]:focus, input[type=password]:focus {
+input[type=text]:focus, input[type=password]:focus, input[type=date]:focus {
   background-color: #ddd;
   outline: none;
+  text-align: center;
 }
 
 /* Overwrite default styles of hr */
@@ -52,10 +55,18 @@ hr {
   cursor: pointer;
   width: 100%;
   opacity: 0.9;
+    -webkit-transition: all 0.4s;
+  -o-transition: all 0.4s;
+  -moz-transition: all 0.4s;
+  transition: all 0.4s;
 }
 
 .registerbtn:hover {
   opacity: 1;
+}
+p{
+font-size: 17px;
+font-weight: 700;
 }
 
 </style>
@@ -64,34 +75,34 @@ hr {
 
 
   <div class="container">
-  <form action="InssaitController" method = "post">
-    <h2>가입하기</h2>
-    <p>인싸이트는 '인싸'라 불리는 인사이더 인플루언서들의  '잇'정보를 제공하는 INSSA-it 입니다.</p>
+  <form action="signUp" method = "post">
+    <h2>INSSA-IT SIGN UP</h2>
+    <p>InSite is an INSSA-it which provides 'It' information of insider influencers called 'INSSA'</p>
     <hr>
 
-    <label for="memberId"><b>아이디</b></label>
-    <input type="text" placeholder="Enter Id" name="memberId" style="text-align: center;" required>
+    <label for="memberId"><b>ID</b></label>
+    <input type="text" placeholder="Enter Id" name="memberId"  required>
 
-    <label for="pw"><b>비밀번호</b></label>
-    <input type="password" placeholder="Enter Password" name="pw" style="text-align: center;"  required>
+    <label for="pw"><b>PassWord</b></label>
+    <input type="password" placeholder="Enter Password" name="pw"  required>
     
-    <label for="location"><b>관심지역</b></label>
-    <input type="text" placeholder="Like Location" name="location" style="text-align: center;" required>
+    <label for="location"><b>Interest Location</b></label>
+    <input type="text" placeholder="Interest Location" name="location"  required>
 
-    <label for="address"><b>주소</b></label>
-    <input type="password" placeholder="Enter Address" name="address" style="text-align: center;" required>
+    <label for="address"><b>Address</b></label>
+    <input type="password" placeholder="Enter Address" name="address" required>
 
-    <label for="birthday"><b>생년월일</b></label>
-    <input type="text" placeholder="YYYY-MM-DD　ex) 2002-05-31" name="birthday" style="text-align: center;" required>
+    <label for="birthday"><b>Birthday</b></label>
+    <input type="date" pattern="" name="birthday"required>
 
-    <label for="gender"><b>성별</b></label>
-    <input type="password" placeholder="Enter Gender" name="gender" style="text-align: center;" required>
+    <label for="gender"><b>Gender</b></label>
+    <input type="password" placeholder="Enter Gender" name="gender"  required>
 
     <input type="hidden" name="command" value="userInsert">
 
-    <button type="submit" class="registerbtn">가입하기</button>　
+    <button type="submit" class="registerbtn">SIGN UP</button>　
     </form>
-   <button class="registerbtn" onclick="location.href='http://localhost:8000/login.html'">로그인 화면 이동</button>
+   <button class="registerbtn" onclick="location.href='http://localhost:8000/login.html'">BACK TO SIGN IN PAGE</button>
   </div>
   
 </body>

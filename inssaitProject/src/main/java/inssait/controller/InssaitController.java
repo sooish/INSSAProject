@@ -2,7 +2,10 @@ package inssait.controller;
 
 import java.io.IOException;
 
+import javax.servlet.http.HttpSession;
+
 import org.elasticsearch.search.SearchHit;
+import org.omg.PortableServer.ForwardRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -12,8 +15,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.sun.org.apache.xml.internal.utils.URI;
+import org.springframework.web.servlet.view.RedirectView;
 
 import inssait.model.domain.MapDetail;
 import inssait.model.domain.Members;
@@ -76,22 +78,51 @@ public class InssaitController {
 	// ======================================================
 	
 	@PostMapping("/signUp")
-	public String signUp(Members member, Model model) {
-		String msg = "회원가입실패";
-		model.addAttribute("msg", "회원가입성공");
-		if(service.signUp(member)) {
-			msg = "회원가입성공";
-			model.addAttribute("msg", "회원가입성공");
+	public ResponseEntity<Object> signUp(Members member, Model model) {
+		ResponseEntity<Object> response = null;
+		try {
+			if(service.signUp(member)) {
+				response = ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY).header("Content-Type", "text/html; charset=UTF-8")
+			               .body("<script>sessionStorage.setItem('" + member.getMemberId() +"', '" + member.getMemberId()+ "');"
+			               		+ "location.href='showMarker.html';</script>");
+			}else {
+			     response = ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY).header("Content-Type", "text/html; charset=UTF-8")
+			           .body("<script>alert('정보가 유효하지 않습니다.'); history.go(-1);</script>");
+			}
+		} catch (Exception e) {
+			System.out.println(e);
+			response = ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY).header("Content-Type", "text/html; charset=UTF-8")
+			           .body("<script>alert('정보가 유효하지 않습니다.'); history.go(-1);</script>");
 		}
-		return msg;
+		return response;
 	}
-//	return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY).header(HttpHeaders.LOCATION, newUrl).build();
 	@PostMapping("/login")
 	public ResponseEntity<Object> login(Members member) {
 		ResponseEntity<Object> response = null;
-		if(service.login(member)) {
-			response = ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY).header(HttpHeaders.LOCATION, "index.html").build();
+		try {
+			if(service.login(member)) {
+				response = ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY).header("Content-Type", "text/html; charset=UTF-8")
+			               .body("<script>sessionStorage.setItem('" + member.getMemberId() +"', '" + member.getMemberId()+ "');"
+			               		+ "location.href='showMarker.html';</script>");
+			}else {
+		         response = ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY).header("Content-Type", "text/html; charset=UTF-8")
+		               .body("<script>alert('로그인 정보를 확인해주세요.'); history.go(-1);</script>");
+			}
+		} catch (Exception e) {
+			System.out.println(e);
+	         response = ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY).header("Content-Type", "text/html; charset=UTF-8")
+	               .body("<script>alert('로그인 정보를 확인해주세요.'); history.go(-1);</script>");
 		}
+		return response;
+	}
+	
+	// 로그아웃 로직
+	@GetMapping("/logout")
+	public ResponseEntity<Object> logout() {
+		ResponseEntity<Object> response = null;
+		response = ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY).header("Content-Type", "text/html; charset=UTF-8")
+	               .body("<script>"
+	               		+ "alert('로그아웃 되었습니다.'); location.href='login.html';sessionStorage.clear();</script>");
 		return response;
 	}
 }

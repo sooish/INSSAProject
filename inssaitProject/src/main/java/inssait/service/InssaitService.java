@@ -120,9 +120,11 @@ public class InssaitService {
 	// ======================================================
 
 	// 회원가입 로직
-	public boolean signUp(Members member) {
+	public boolean signUp(Members member) throws Exception {
 		boolean result = false;
-		if (mRepo.save(new Members(member.getMemberId(), member.getPw(), member.getLocation(), member.getAddress(),
+		if(mRepo.findById(member.getMemberId()).isPresent()) {
+			throw new Exception();
+		}else if (mRepo.save(new Members(member.getMemberId(), member.getPw(), member.getLocation(), member.getAddress(),
 				member.getBirthday(), member.getGender())) != null) {
 			result = true;
 		}
@@ -130,14 +132,16 @@ public class InssaitService {
 	}
 
 	// 로그인 로직
-	public boolean login(Members member) {
+	public boolean login(Members member) throws Exception {
 		boolean result = false;
-		System.out.println(mRepo.findAll());
-		System.out.println(mRepo.findById(member.getMemberId()).get().getPw());
-		if (mRepo.findById(member.getMemberId()).get().getPw().equals(member.getPw())) {
+		if (!mRepo.findById(member.getMemberId()).isPresent()) {
+			throw new Exception();
+		} else if(mRepo.findById(member.getMemberId()).get().getPw().equals(member.getPw())) {
 			result = true;
 		}
 		return result;
 	}
+	
+
 
 }
