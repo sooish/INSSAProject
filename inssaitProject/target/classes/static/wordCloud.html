@@ -67,6 +67,7 @@
                 function showCloud(data) {
                     d3.layout.cloud().size([width, height])
                         .words(data)
+                        .padding(20)
                         .rotate(function (d) {
                             return d.frequency > 10 ? 0 : 90;
                         })

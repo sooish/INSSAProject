@@ -75,7 +75,8 @@
         종료날짜지정 : <input type="date" id="date2"><br><br>
         <button onclick="search()">검색</button><br><br>
     </div>
-    <div id="map" style="width:60%;height:350px;margin : 0 auto;" class="field"></div>
+    <div id="map" style="width:60%;height:350px;margin : 0 auto;" class="field"></div><br>
+    <div class="field" id="explain"></div>
     <div class="field"><br>inSSa-it의 인싸들이 방문하는 핫플레이스 지도입니다. CLICK!</div>
     <script type="text/javascript"
         src="//dapi.kakao.com/v2/maps/sdk.js?appkey=00f87dfc64daeb277224676ae0cf3f88&libraries=services"></script>
@@ -85,6 +86,8 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
         var array = [];
+        var startDate = 30000000;
+        var endDate = 0;
         axios.get("http://127.0.0.1:8000/getLocationInfo")
             .then(resData => {
                 for (let i = 0; i < resData.data.length; i++) {
@@ -95,8 +98,8 @@
                 console.log(array);
                 var mapContainer = document.getElementById('map'), // 지도를 표시할 div  
                     mapOption = {
-                        center: new kakao.maps.LatLng(37.5670399093241, 126.875607758973), // 지도의 중심좌표
-                        level: 14 // 지도의 확대 레벨
+                        center: new kakao.maps.LatLng(37.543995256638, 126.991641147781), // 지도의 중심좌표
+                        level: 7 // 지도의 확대 레벨
                     };
 
                 var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
@@ -107,17 +110,13 @@
                 array.forEach(element => {
 
                     // 마커 이미지의 이미지 크기 입니다
-                    var imageSize = new kakao.maps.Size(30, 40);
-
-                    // 마커 이미지를 생성합니다    
-                    var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+                    var imageSize = new kakao.maps.Size(20, 30);
 
                     // 마커를 생성합니다
                     var marker = new kakao.maps.Marker({
                         map: map,
                         position: new kakao.maps.LatLng(element.y, element.x),
                         title: element.place_name,
-                        image: markerImage
                     });
                     var content = '<div class="customoverlay">' +
                         '  <a href="https://www.instagram.com/explore/tags/' + element.place_name + '" target="_blank">' +
@@ -145,7 +144,16 @@
                         }
                     });
                     overlay.setMap(null);
+                    if(startDate > element['post-date'].replace("-", "").replace("-", "")){
+                        startDate = element['post-date'].replace("-", "").replace("-", "");
+                    }
+                    if(endDate < element['post-date'].replace("-", "").replace("-", "")){
+                        endDate = element['post-date'].replace("-", "").replace("-", "");
+                    }
                 })
+                document.getElementById("explain").innerText = 
+                startDate.substring(0, 4) + "년" + startDate.substring(4, 6) + "월" + startDate.substring(6, 8) + "일부터 " 
+                + endDate.substring(0, 4) + "년" + endDate.substring(4, 6) + "월" + endDate.substring(6, 8) + "일까지의 핫 플레이스 입니다.";
 
 
             })
@@ -153,27 +161,30 @@
                 console.log("비정상 응답 ", error);
             });
 
+        
+        
         function search(location, date1, date2) {
-            if(document.getElementById("locationName").value == ""){
+            if (document.getElementById("locationName").value == "") {
                 location = " ";
-            }else{
+            } else {
                 location = document.getElementById("locationName").value;
             }
-            if(document.getElementById("date1").value == ""){
+            if (document.getElementById("date1").value == "") {
                 date1 = 0;
-            }else{
+            } else {
                 date1 = document.getElementById("date1").value.replace("-", "").replace("-", "");
             }
-            if(document.getElementById("date2").value == ""){
+            if (document.getElementById("date2").value == "") {
                 date2 = 30000000;
-            }else{
+            } else {
                 date2 = document.getElementById("date2").value.replace("-", "").replace("-", "");
             }
+            var categoryGroupName = "";
             let lArray = [];
             array.forEach(element => {
                 if (element.address_name.includes(location)
-                && date1 < element['post-date'].replace("-", "").replace("-", "") 
-                && date2 > element['post-date'].replace("-", "").replace("-", "")) {
+                    && date1 < element['post-date'].replace("-", "").replace("-", "")
+                    && date2 > element['post-date'].replace("-", "").replace("-", "")) {
                     lArray.push(element);
                 }
             });
@@ -181,8 +192,8 @@
             document.getElementById('map').innerHTML = "<span></span>"
             var mapContainer = document.getElementById('map'), // 지도를 표시할 div  
                 mapOption = {
-                    center: new kakao.maps.LatLng(37.5670399093241, 126.875607758973), // 지도의 중심좌표
-                    level: 14 // 지도의 확대 레벨
+                    center: new kakao.maps.LatLng(lArray[1].y, lArray[1].x), // 지도의 중심좌표
+                    level: 8 // 지도의 확대 레벨
                 };
 
             var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
@@ -196,14 +207,12 @@
                 var imageSize = new kakao.maps.Size(30, 40);
 
                 // 마커 이미지를 생성합니다    
-                var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
 
                 // 마커를 생성합니다
                 var marker = new kakao.maps.Marker({
                     map: map,
                     position: new kakao.maps.LatLng(element.y, element.x),
                     title: element.place_name,
-                    image: markerImage
                 });
                 var content = '<div class="customoverlay">' +
                     '  <a href="https://www.instagram.com/explore/tags/' + element.place_name + '" target="_blank">' +
@@ -232,6 +241,18 @@
                 });
                 overlay.setMap(null);
             })
+            var dateMonth = [01, 02, 03, 04, 05, 06, 07,
+                             08, 09, 10, 11, 12];
+            var date = new Date();
+            axios.post("http://127.0.0.1:8000/saveSearchInfo?memberId=" + sessionStorage.getItem(sessionStorage.key(0))
+                + "&searchLocation=" + location + "&categoryGroupName=" + categoryGroupName + "&dateOfSearch=" + date.getFullYear()
+                + dateMonth[date.getMonth()] + date.getDate())
+                .then(resData => {
+                    console.log(resData);
+                })
+                .catch(error => {
+                    console.log("비정상 응답 ", error);
+                });
         }
     </script>
 </body>

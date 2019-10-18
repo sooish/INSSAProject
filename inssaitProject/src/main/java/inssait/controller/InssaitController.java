@@ -19,6 +19,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import inssait.model.domain.MapDetail;
 import inssait.model.domain.Members;
+import inssait.model.domain.SearchInfo;
 import inssait.service.InssaitService;
 
 @CrossOrigin(origins = "http://localhost:8000")
@@ -77,6 +78,22 @@ public class InssaitController {
 	
 	// ======================================================
 	
+	@PostMapping("/saveSearchInfo")
+	public void saveSearchInfo (SearchInfo sInfo) {
+		try {
+			service.saveSearchInfo(sInfo);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@GetMapping("/getSearchInfo")
+	public Iterable<SearchInfo> getAllSearchInfo() {
+		return service.getAllSearchInfo();
+	}
+	
+	// ======================================================
+	
 	@PostMapping("/signUp")
 	public ResponseEntity<Object> signUp(Members member, Model model) {
 		ResponseEntity<Object> response = null;
@@ -100,7 +117,11 @@ public class InssaitController {
 	public ResponseEntity<Object> login(Members member) {
 		ResponseEntity<Object> response = null;
 		try {
-			if(service.login(member)) {
+			if(service.login(member) && member.getMemberId().equals("salad")) {
+				response = ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY).header("Content-Type", "text/html; charset=UTF-8")
+			               .body("<script>sessionStorage.setItem('" + member.getMemberId() +"', '" + member.getMemberId()+ "');"
+			               		+ "location.href='manager.html';</script>");
+			}else if(service.login(member)) {
 				response = ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY).header("Content-Type", "text/html; charset=UTF-8")
 			               .body("<script>sessionStorage.setItem('" + member.getMemberId() +"', '" + member.getMemberId()+ "');"
 			               		+ "location.href='showMarker.html';</script>");
@@ -117,12 +138,10 @@ public class InssaitController {
 	}
 	
 	// 로그아웃 로직
-	@GetMapping("/logout")
+	@GetMapping("/logout2")
 	public ResponseEntity<Object> logout() {
-		ResponseEntity<Object> response = null;
-		response = ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY).header("Content-Type", "text/html; charset=UTF-8")
-	               .body("<script>"
-	               		+ "alert('로그아웃 되었습니다.'); location.href='login.html';sessionStorage.clear();</script>");
-		return response;
+		return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY).header("Content-Type", "text/html; charset=UTF-8")
+	               .body("<script>sessionStorage.clear();"
+		               		+ "alert('로그아웃되었습니다.'); location.href='login.html';</script>");
 	}
 }

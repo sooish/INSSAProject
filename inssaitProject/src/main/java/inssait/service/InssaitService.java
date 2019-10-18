@@ -3,22 +3,22 @@ package inssait.service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.elasticsearch.search.SearchHit;
 import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 
 import inssait.crawling.Crawling;
 import inssait.crawling.Selenium;
-import inssait.model.dao.MapDetailRepository;
 import inssait.model.dao.InfluencersRepository;
+import inssait.model.dao.MapDetailRepository;
 import inssait.model.dao.MembersRepository;
+import inssait.model.dao.SearchInfoRepository;
 import inssait.model.domain.Influencers;
 import inssait.model.domain.MapDetail;
 import inssait.model.domain.Members;
+import inssait.model.domain.SearchInfo;
 
 @Service
 public class InssaitService {
@@ -26,6 +26,8 @@ public class InssaitService {
 	private InfluencersRepository ifRepo;
 	@Autowired
 	private MembersRepository mRepo;
+	@Autowired
+	private SearchInfoRepository siRepo;
 
 	private static MapDetailRepository es = MapDetailRepository.getInstance();
 
@@ -118,14 +120,27 @@ public class InssaitService {
 	}
 
 	// ======================================================
+	
+	// 검색 정보 저장 로직
+	public void saveSearchInfo(SearchInfo sInfo) throws Exception {
+		if (siRepo.save(sInfo) == null) {
+			throw new Exception();
+		}
+	}
+	
+	// 검색 정보 검색 로직
+	public Iterable<SearchInfo> getAllSearchInfo() {
+		return siRepo.findAll();
+	}
+	
+	// ======================================================
 
 	// 회원가입 로직
 	public boolean signUp(Members member) throws Exception {
 		boolean result = false;
 		if(mRepo.findById(member.getMemberId()).isPresent()) {
 			throw new Exception();
-		}else if (mRepo.save(new Members(member.getMemberId(), member.getPw(), member.getLocation(), member.getAddress(),
-				member.getBirthday(), member.getGender())) != null) {
+		}else if (mRepo.save(member) != null) {
 			result = true;
 		}
 		return result;

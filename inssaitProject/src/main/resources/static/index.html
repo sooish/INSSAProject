@@ -57,6 +57,7 @@ font-size: 25px;
   <a href="http://localhost:8000/login.html">Login</a>
   <a href="http://localhost:8000/signUp.html">Signup</a>
 </div>
+<div class="field" id="explain"></div>
 <div class="content">
   <P id=timeNow></P><p>The Hottest Places in Korea Now!!</p>
 </div>
@@ -67,6 +68,8 @@ font-size: 25px;
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
     <script>
+    var startDate = 30000000;
+    var endDate = 0;
 	playAlert = setInterval(function() {
 		var dateMonth = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
 			"Aug", "Sep", "Oct", "Nov", "Dec" ]
@@ -102,7 +105,16 @@ font-size: 25px;
                             keyArray.push({'text' : element.road_address_name.split(" ")[1], 'frequency' : 1});
                         }
                     }
+                    if(startDate > element['post-date'].replace("-", "").replace("-", "")){
+                        startDate = element['post-date'].replace("-", "").replace("-", "");
+                    }
+                    if(endDate < element['post-date'].replace("-", "").replace("-", "")){
+                        endDate = element['post-date'].replace("-", "").replace("-", "");
+                    }
                 }) 
+                document.getElementById("explain").innerText = 
+                startDate.substring(0, 4) + "년" + startDate.substring(4, 6) + "월" + startDate.substring(6, 8) + "일부터 " 
+                + endDate.substring(0, 4) + "년" + endDate.substring(4, 6) + "월" + endDate.substring(6, 8) + "일까지의 핫 플레이스 입니다.";
 
                 //Word Cloud
                 var width = 1370,
@@ -123,6 +135,7 @@ font-size: 25px;
                 function showCloud(data) {
                     d3.layout.cloud().size([width, height])                      
                         .words(data)
+                        .padding(70)
                         .rotate(function (d) {
                             return d.frequency > 10 ? 0 : 0;
                         })                         
