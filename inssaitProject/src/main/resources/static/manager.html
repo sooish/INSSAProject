@@ -1,10 +1,23 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
 </head>
+
 <body>
-a
+    a
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        axios.get("http://127.0.0.1:8000/getSearchInfo")
+            .then(resData => {
+                console.log(resData);
+            })
+            .catch(error => {
+                console.log("비정상 응답 ", error);
+            });
+    </script>
 </body>
+
 </html>

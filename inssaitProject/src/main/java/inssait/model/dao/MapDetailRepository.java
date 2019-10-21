@@ -86,7 +86,7 @@ public class MapDetailRepository {
 		}
 	}
 
-	public SearchHit[] getLocationInfo() throws IOException {
+	public SearchHit[] getLocationInfo(String indexName) throws IOException {
 		RestHighLevelClient client = client();
 		SearchHit[] searchHit = null;
 		try {
@@ -94,13 +94,33 @@ public class MapDetailRepository {
 			searchSourceBuilder.from(0);
 			searchSourceBuilder.size(10000);
 
-			SearchRequest request = new SearchRequest("core-info");
+			SearchRequest request = new SearchRequest(indexName);
 			request.source(searchSourceBuilder);
 			searchHit = client.search(request, RequestOptions.DEFAULT).getHits().getHits();
 		} finally {
 			client.close();
 		}
 		return searchHit;
+	}
+	
+	public void saveLocationByUser(MapDetail mapDetail, String userId) throws IOException {
+		RestHighLevelClient client = client();
+		try {
+			IndexRequest request = new IndexRequest("location-byuser", "_doc", mapDetail.getEsId());
+			request.source(XContentFactory.jsonBuilder().startObject().field("userId", userId).field("insta-id", mapDetail.getInfluencerName())
+					.field("hashtag", mapDetail.getHashTagToString()).field("post-date", mapDetail.getPostDate())
+					.field("place", mapDetail.getPlace()).field("address_name", mapDetail.getAddressName())
+					.field("category_group_code", mapDetail.getCategoryGroupCode())
+					.field("category_group_name", mapDetail.getCategoryGroupName())
+					.field("category_name", mapDetail.getCategoryName()).field("distance", mapDetail.getDistance())
+					.field("location_id", mapDetail.getId()).field("phone", mapDetail.getPhone())
+					.field("place_name", mapDetail.getPlaceName()).field("place_url", mapDetail.getPlaceUrl())
+					.field("road_address_name", mapDetail.getRoadAddressName()).field("x", mapDetail.getX())
+					.field("y", mapDetail.getY()).endObject());
+			client.index(request, RequestOptions.DEFAULT);
+		} finally {
+			client.close();
+		}
 	}
 
 }

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+
+        <head>
+                <meta charset="utf-8">
+                <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+                    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+                <title>IN-SSAIT</title>
+                <style>
+                    div.field,
+                    select.box {
+                        text-align: center;
+                    }
+            
+                    div#core {
+            padding-left: 40px;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 25px;
+        }
+        div#user{
+            font-size: 20px;
+        }
+            
+                    .customoverlay {
+                        position: relative;
+                        bottom: 85px;
+                        border-radius: 6px;
+                        border: 1px solid #ccc;
+                        border-bottom: 2px solid #ddd;
+                        float: left;
+                    }
+            
+                    .customoverlay:nth-of-type(n) {
+                        border: 0;
+                        box-shadow: 0px 1px 2px #888;
+                    }
+            
+                    .customoverlay a {
+                        display: block;
+                        text-decoration: none;
+                        color: #000;
+                        text-align: center;
+                        border-radius: 6px;
+                        font-size: 14px;
+                        font-weight: bold;
+                        overflow: hidden;
+                        background: #d95050;
+                        background: #d95050 url(http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/arrow_white.png) no-repeat right 14px center;
+                    }
+            
+                    .customoverlay .title {
+                        display: block;
+                        text-align: center;
+                        background: #fff;
+                        margin-right: 35px;
+                        padding: 10px 15px;
+                        font-size: 14px;
+                        font-weight: bold;
+                    }
+            
+                    .customoverlay:after {
+                        content: '';
+                        position: absolute;
+                        margin-left: -12px;
+                        left: 50%;
+                        bottom: -12px;
+                        width: 22px;
+                        height: 12px;
+                        background: url('http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')
+                    }
+                </style>
+                <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+                <script type="text/javascript">
+                    $(document).ready(function () {
+                        $("#headers").load("nav.html");
+                    });
+                </script>
+            </head>
+
+<body>
+        <div id="headers"></div>
+        <br><br><br><br><br>
+        <div id="search" class="field">
+            지역검색 : <input type="text" id="locationName"><br>
+            시작날짜지정 : <input type="date" id="date1"><br>
+            종료날짜지정 : <input type="date" id="date2"><br><br>
+            <button onclick="search()">검색</button><br><br>
+        </div>
+        <div class="field" id="explain"></div>
+        <div class="field" id="user"></div>
+        <div id="core" class="row">
+            <div id="map" style="width:60%;height:350px;margin : 0 auto;" class="col-6"></div>
+            <div id="kakao" class="col-6"><br><br><br><br><br><br><br><br><br><br>포인트를 클릭하면<br>장소 정보가 나옵니다.</div>
+        </div>
+        
+    <script type="text/javascript"
+        src="//dapi.kakao.com/v2/maps/sdk.js?appkey=00f87dfc64daeb277224676ae0cf3f88&libraries=services"></script>
+
+    <script type="text/javascript"
+        src="//dapi.kakao.com/v2/maps/sdk.js?appkey=00f87dfc64daeb277224676ae0cf3f88"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        document.getElementById("user").innerText = sessionStorage.getItem(sessionStorage.key(0)) + "님의 MyPlace 정보입니다.";
+        var array = [];
+        var userArray = [];
+        var placeName;
+        axios.get("http://127.0.0.1:8000/getLocationInfo?indexName=location-byuser")
+        .then(resData => {
+            console.log(resData)
+                for (let i = 0; i < resData.data.length; i++) {
+                    if (Object.keys(resData.data[i].sourceAsMap).includes("place_url")) {
+                        array.push(resData.data[i].sourceAsMap);
+                    }
+                }
+                array.forEach(element => {
+                    if(element.userId == sessionStorage.getItem(sessionStorage.key(0))){
+                        userArray.push(element);
+                    }
+                });
+                console.log(userArray)
+                var mapContainer = document.getElementById('map');
+                mapContainer.style.width = '650px';
+                mapContainer.style.height = '600px';  // 지도를 표시할 div
+                mapContainer.style.paddingLeft = '10px';
+
+                mapOption = {
+                    center: new kakao.maps.LatLng(37.543995256638, 126.991641147781), // 지도의 중심좌표
+                    level: 7 // 지도의 확대 레벨
+                };
+
+                var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+
+                userArray.forEach(element => {
+
+                    // 마커 이미지의 이미지 크기 입니다
+                    var imageSize = new kakao.maps.Size(20, 30);
+
+                    // 마커를 생성합니다
+                    var marker = new kakao.maps.Marker({
+                        map: map,
+                        position: new kakao.maps.LatLng(element.y, element.x),
+                        title: element.place_name,
+                    });
+                    var content = '<div class="customoverlay">' +
+                        '  <a href="https://www.instagram.com/explore/tags/' + element.place_name + '" target="_blank">' +
+                        '    <span id="location" class="title">' + element.place_name + '</span>' +
+                        '  </a>' +
+                        '</div>';
+
+                    // 커스텀 오버레이가 표시될 위치입니다 
+                    var position = new kakao.maps.LatLng(element.y, element.x);
+
+                    // 커스텀 오버레이를 생성합니다
+                    var overlay = new kakao.maps.CustomOverlay({
+                        content: content,
+                        map: map,
+                        position: marker.getPosition()
+                    });
+                    kakao.maps.event.addListener(marker, 'click', function (mouseEvent) {
+                        if (overlay.getMap() == null) {
+                            overlay.setMap(map);
+                            document.getElementById("kakao").innerHTML = '<iframe src="' + element.place_url.substring(0, element.place_url.indexOf("m/") + 2) + "m/" +
+                                element.place_url.substring(element.place_url.indexOf("m/") + 2, element.place_url.length) + '" width="600" height="600"></iframe>';
+                        } else {
+                            overlay.setMap(null);
+                        }
+                    });
+                    overlay.setMap(null);
+                })
+            })
+            .catch(error => {
+                console.log("비정상 응답 ", error);
+            });
+    </script>
+</body>
+
+</html>

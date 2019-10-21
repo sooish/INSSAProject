@@ -66,14 +66,23 @@ public class InssaitController {
 	}
 	
 	@GetMapping("/getLocationInfo")
-	public SearchHit[] getLocationInfo() {
+	public SearchHit[] getLocationInfo(String indexName) {
 		SearchHit[] searchHit = null;
 		try {
-			searchHit = service.getLocationInfo();
+			searchHit = service.getLocationInfo(indexName);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return searchHit;
+	}
+	
+	@PostMapping("/saveLocationByUser")
+	public void saveLocationByUser(MapDetail mapDetail, String userId) {
+		try {
+			service.saveLocationByUser(mapDetail, userId);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	// ======================================================

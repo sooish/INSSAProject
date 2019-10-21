@@ -115,8 +115,12 @@ public class InssaitService {
 				mapDetail.getPlaceUrl(), mapDetail.getRoadAddressName(), mapDetail.getX(), mapDetail.getY()));
 	}
 
-	public SearchHit[] getLocationInfo() throws IOException {
-		return es.getLocationInfo();
+	public SearchHit[] getLocationInfo(String indexName) throws IOException {
+		return es.getLocationInfo(indexName);
+	}
+	
+	public void saveLocationByUser(MapDetail mapDetail, String userId) throws IOException {
+		es.saveLocationByUser(mapDetail, userId);
 	}
 
 	// ======================================================
