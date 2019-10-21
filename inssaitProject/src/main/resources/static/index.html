@@ -106,15 +106,15 @@
         // 우측 중단 팔로워수 높은 순서로 탑 5명 나열하기
         // 좌측에 워드클라우드가 어떻게 어떤정보를 차트화 한것 인지 직시할수 있는 설명
         //getFindFollowings
-        // axios.get("http://127.0.0.1:8000/getFindFollowings")
-        //         .then(resData => {
-        //  		console.log(resData);
+        axios.get("http://127.0.0.1:8000/getFindFollowings")
+                .then(resData => {
+         		console.log(resData);
 
 
-        //         })
-        //         .catch(error => {
-        //             console.log("비정상 응답 ", error);
-        //         });
+                })
+                .catch(error => {
+                    console.log("비정상 응답 ", error);
+                });
 
         //===============================================================================
         // wordCloud Elastic Search로 위치정보 가져오기

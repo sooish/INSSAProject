@@ -118,33 +118,33 @@ public class InssaitService {
 	public SearchHit[] getLocationInfo(String indexName) throws IOException {
 		return es.getLocationInfo(indexName);
 	}
-	
+
 	public void saveLocationByUser(MapDetail mapDetail, String userId) throws IOException {
 		es.saveLocationByUser(mapDetail, userId);
 	}
 
 	// ======================================================
-	
+
 	// 검색 정보 저장 로직
 	public void saveSearchInfo(SearchInfo sInfo) throws Exception {
 		if (siRepo.save(sInfo) == null) {
 			throw new Exception();
 		}
 	}
-	
+
 	// 검색 정보 검색 로직
 	public Iterable<SearchInfo> getAllSearchInfo() {
 		return siRepo.findAll();
 	}
-	
+
 	// ======================================================
 
 	// 회원가입 로직
 	public boolean signUp(Members member) throws Exception {
 		boolean result = false;
-		if(mRepo.findById(member.getMemberId()).isPresent()) {
+		if (mRepo.findById(member.getMemberId()).isPresent()) {
 			throw new Exception();
-		}else if (mRepo.save(member) != null) {
+		} else if (mRepo.save(member) != null) {
 			result = true;
 		}
 		return result;
@@ -155,12 +155,15 @@ public class InssaitService {
 		boolean result = false;
 		if (!mRepo.findById(member.getMemberId()).isPresent()) {
 			throw new Exception();
-		} else if(mRepo.findById(member.getMemberId()).get().getPw().equals(member.getPw())) {
+		} else if (mRepo.findById(member.getMemberId()).get().getPw().equals(member.getPw())) {
 			result = true;
 		}
 		return result;
 	}
-	
 
+	// 팔로워수가 높은 순으로 5명 정보 추출
+	public List<Influencers> findFollowings() {
+		return ifRepo.findTop5ByOrderByFollowingsDesc();
+	}
 
 }
