@@ -7,5 +7,5 @@ import org.springframework.data.repository.CrudRepository;
 import inssait.model.domain.Influencers;
 
 public interface InfluencersRepository extends CrudRepository<Influencers, String> {
-   List<Influencers> findTop5ByOrderByFollowingsDesc();
+   List<Influencers> findTop10ByOrderByFollowingsDesc();
 }

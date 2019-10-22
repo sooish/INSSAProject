@@ -84,6 +84,37 @@ public class InssaitController {
 		}
 	}
 
+	@GetMapping("/getMyPlace")
+	public SearchHit[] getMyPlace(String id) {
+		SearchHit[] searchHit = null;
+		try {
+			searchHit = service.getMyPlace(id);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return searchHit;
+	}
+
+	@GetMapping("/getMaxNum")
+	public long getMaxNum() {
+		long result = 0;
+		try {
+			result = service.getMaxNum();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	@GetMapping("/deleteLocation")
+	   public void deleteLocation(String id) {
+	      try {
+	         service.deleteLocation(id);
+	      } catch (Exception e) {
+	         e.printStackTrace();
+	      }
+	   }
+
 	// ======================================================
 
 	@PostMapping("/saveSearchInfo")
@@ -125,7 +156,7 @@ public class InssaitController {
 		return response;
 	}
 
-	@PostMapping("/login")
+	@PostMapping("/login2")
 	public ResponseEntity<Object> login(Members member) {
 		ResponseEntity<Object> response = null;
 		try {
@@ -133,12 +164,12 @@ public class InssaitController {
 				response = ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY)
 						.header("Content-Type", "text/html; charset=UTF-8")
 						.body("<script>sessionStorage.setItem('" + member.getMemberId() + "', '" + member.getMemberId()
-								+ "');" + "location.href='manager.html';</script>");
+								+ "');" + "location.href='dashboard.html';</script>");
 			} else if (service.login(member)) {
 				response = ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY)
 						.header("Content-Type", "text/html; charset=UTF-8")
 						.body("<script>sessionStorage.setItem('" + member.getMemberId() + "', '" + member.getMemberId()
-								+ "');" + "location.href='showMarker.html';</script>");
+								+ "');" + "location.href='about.html';</script>");
 			} else {
 				response = ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY)
 						.header("Content-Type", "text/html; charset=UTF-8")
@@ -154,10 +185,10 @@ public class InssaitController {
 	}
 
 	// 로그아웃 로직
-	@GetMapping("/logout2")
+	@GetMapping("/logout3")
 	public ResponseEntity<Object> logout() {
 		return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY).header("Content-Type", "text/html; charset=UTF-8")
-				.body("<script>sessionStorage.clear();" + "alert('로그아웃되었습니다.'); location.href='login.html';</script>");
+				.body("<script>sessionStorage.clear();" + "alert('로그아웃되었습니다.'); location.href='profile.html';</script>");
 	}
 
 	// 우측 중단 팔로워수 높은 순서로 탑 5명 나열하기

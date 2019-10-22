@@ -47,7 +47,7 @@ hr {
 
 /* Set a style for the submit button */
 .registerbtn {
-  background-color: black;
+  background-color: grey;
   color: white;
   padding: 15px ;
   border: none;
@@ -72,36 +72,40 @@ font-weight: 700;
 </head>
 <body>
 
-
+   
   <div class="container">
-  <form action="InssaitController" method = "post">
-    <h2>INSSA-IT SIGN UP</h2>
-    <p>InSite is an INSSA-it which provides 'It' information of insider influencers called 'INSSA'</p>
+  <form action="/signUp" method = "post">
+    <h2>SIGN UP</h2>
+    <p>인싸의 세계로 들어가고 싶다면, 가입하세요!!</p>
     <hr>
+   <!--  <img src="images/about.png"; background-size: 600px; height: 500px; margin: auto;"> <br>
+   <br>
+ -->
 
-    <label for="memberId"><b>ID</b></label>
-    <input type="text" placeholder="Enter Id" name="memberId"  required>
+    <label for="memberId"><b>아이디</b></label>
+    <input type="text" placeholder="아이디를 입력하세요" name="memberId"  required>
 
-    <label for="pw"><b>PassWord</b></label>
-    <input type="password" placeholder="Enter Password" name="pw"  required>
+    <label for="pw"><b>비밀번호</b></label>
+    <input type="password" placeholder="비밀번호를 입력하세요" name="pw"  required>
     
-    <label for="location"><b>Interest Location</b></label>
-    <input type="text" placeholder="Interest Location" name="location"  required>
+    <label for="location"><b>관심지역</b></label>
+    <input type="text" placeholder="관심있는 지역을 입력하세요" name="location"  required>
 
-    <label for="address"><b>Address</b></label>
-    <input type="password" placeholder="Enter Address" name="address" required>
+    <label for="address"><b>주거지역</b></label>
+    <input type="text" placeholder="살고계신 지역을 입력하세요" name="address" required>
 
-    <label for="birthday"><b>Birthday</b></label>
-    <input type="date" pattern="" name="birthday"required>
+    <label for="birthday"><b>생일</b></label>
+    <input type="date" pattern="" name="생일을 입력하세요"required>
 
-    <label for="gender"><b>Gender</b></label>
-    <input type="password" placeholder="Enter Gender" name="gender"  required>
+    <label for="gender"><b>성별</b></label>
+    <input type="text" placeholder="성별을 입력하세요" name="gender"  required>
 
     <input type="hidden" name="command" value="userInsert">
-
-    <button type="submit" class="registerbtn">SIGN UP</button>　
+   <br>
+    <button type="submit" class="registerbtn">가입하기</button>　
+    
     </form>
-   <button class="registerbtn" onclick="location.href='http://localhost:8000/login.html'">BACK TO SIGN IN PAGE</button>
+   <button class="registerbtn" onclick="location.href='http://localhost:8000/login.html'">메인화면으로 돌아가기</button>
   </div>
   
 </body>

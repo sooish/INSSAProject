@@ -123,6 +123,17 @@ public class InssaitService {
 		es.saveLocationByUser(mapDetail, userId);
 	}
 
+	public SearchHit[] getMyPlace(String id) throws IOException {
+		return es.getMyPlace(id);
+	}
+
+	public long getMaxNum() throws IOException {
+		return es.getMaxNum();
+	}
+
+	public void deleteLocation(String id) throws IOException {
+		es.deleteLocation(id);
+	}
 	// ======================================================
 
 	// 검색 정보 저장 로직
@@ -163,7 +174,7 @@ public class InssaitService {
 
 	// 팔로워수가 높은 순으로 5명 정보 추출
 	public List<Influencers> findFollowings() {
-		return ifRepo.findTop5ByOrderByFollowingsDesc();
+		return ifRepo.findTop10ByOrderByFollowingsDesc();
 	}
 
 }
