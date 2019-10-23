@@ -105,15 +105,24 @@ public class InssaitController {
 		}
 		return result;
 	}
-	
+
 	@GetMapping("/deleteLocation")
-	   public void deleteLocation(String id) {
-	      try {
-	         service.deleteLocation(id);
-	      } catch (Exception e) {
-	         e.printStackTrace();
-	      }
-	   }
+	public void deleteLocation(String id) {
+		try {
+			service.deleteLocation(id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@GetMapping("/deleteMyPlace")
+	public void deleteMyPlace(String id) {
+		try {
+			service.deleteMyPlace(id);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	// ======================================================
 
@@ -129,6 +138,11 @@ public class InssaitController {
 	@GetMapping("/getSearchInfo")
 	public Iterable<SearchInfo> getAllSearchInfo() {
 		return service.getAllSearchInfo();
+	}
+
+	@GetMapping("/count")
+	public Integer countByDateOfSearch(String DateOfSearch) {
+		return service.countByDateOfSearch(DateOfSearch);
 	}
 
 	// ======================================================
@@ -188,7 +202,8 @@ public class InssaitController {
 	@GetMapping("/logout3")
 	public ResponseEntity<Object> logout() {
 		return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY).header("Content-Type", "text/html; charset=UTF-8")
-				.body("<script>sessionStorage.clear();" + "alert('로그아웃되었습니다.'); location.href='profile.html';</script>");
+				.body("<script>sessionStorage.clear();"
+						+ "alert('로그아웃되었습니다.'); location.href='profile.html';</script>");
 	}
 
 	// 우측 중단 팔로워수 높은 순서로 탑 5명 나열하기

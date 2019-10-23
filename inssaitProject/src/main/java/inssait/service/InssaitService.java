@@ -28,6 +28,8 @@ public class InssaitService {
 	private MembersRepository mRepo;
 	@Autowired
 	private SearchInfoRepository siRepo;
+	
+	private static ArrayList<String> myPlaceId = new ArrayList<>();
 
 	private static MapDetailRepository es = MapDetailRepository.getInstance();
 
@@ -134,6 +136,11 @@ public class InssaitService {
 	public void deleteLocation(String id) throws IOException {
 		es.deleteLocation(id);
 	}
+
+	public void deleteMyPlace(String id) throws IOException {
+		myPlaceId.add(id);
+		es.deleteMyPlace(id);
+	}
 	// ======================================================
 
 	// 검색 정보 저장 로직
@@ -146,6 +153,11 @@ public class InssaitService {
 	// 검색 정보 검색 로직
 	public Iterable<SearchInfo> getAllSearchInfo() {
 		return siRepo.findAll();
+	}
+
+	// 검색 정보 숫자 추출 로직
+	public Integer countByDateOfSearch(String DateOfSearch) {
+		return siRepo.countByDateOfSearch(DateOfSearch);
 	}
 
 	// ======================================================

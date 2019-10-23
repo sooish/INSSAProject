@@ -12,8 +12,8 @@
   height: 42px;
   line-height: 40px;
   outline: none;
-  padding-left: 18px;
-  padding-right: 30px;
+  /* padding-left: 18px;
+  padding-right: 30px; */
   position: relative;
   text-align: left !important;
   -webkit-transition: all 0.2s ease-in-out;
@@ -24,7 +24,8 @@
           user-select: none;
   white-space: nowrap;
   width: 100px; 
-  margin: 0 auto }
+  margin: 10px; 
+}
   .nice-select:hover {
     border-color: #dbdbdb; }
   .nice-select:active, .nice-select.open, .nice-select:focus {

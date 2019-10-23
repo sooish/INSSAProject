@@ -22,48 +22,58 @@
 
 
     </script>
+    <style>
+        div#explain{
+            font-size: 22px;
+        }
+    </style>
 </head>
 
 <body>
-    <div id="headers"></div>
-    <br><br><br><br><br>
-    <div id="search" class="field">
-        지역검색 : <input type="text" id="locationName"><br>
-        시작날짜지정 : <input type="date" id="date1"><br>
-        종료날짜지정 : <input type="date" id="date2"><br>
-        <div id="selectBox">
+        <div id="headers"></div>
+        <br><br><br><br><br>
+        <h2 style="text-align:center">인싸 핫플레이스 지도 서비스</h2>
+        <p style="text-align:center">
+        인싸이트의 인플루언서들이 인스타그램에 올린 피드의 장소정보 검색서비스입니다. 관심지역과 인플루언서들의 방문기간 및 카테고리를 설정해보세요. <br> 
+       희망조건에 맞는 장소를 찾아드립니다. 검색 결과를 클릭하시면 다음플레이스 서비스와 연결되어 더 자세한 정보를 보실 수 있습니다.</p>
+        <hr>
+        <div class="field" id="explain"></div><br>
+        <div id="search" class="field row">
+            <span class="searchTitle">지역검색 :</span>
+            <input type="text" id="locationName">
+            <span class="searchTitle">시작날짜 : </span>
+            <input type="date" id="date1">
+            <span class="searchTitle">종료날짜 : </span>
+            <input type="date" id="date2">
+            <span class="searchTitle">카테고리 : </span>
             <select name="category" id="locationCategory">
                 <option value="전체보기" selected="selected">전체보기</option>
-                <optgroup label="음식점">
-                    <option value="양식">양식</option>
-                    <option value="일식">일식</option>
-                </optgroup>
+                <option value="놀거리">놀거리</option>
+                <option value="먹거리"">먹거리</option>
                 <option value="카페">카페</option>
                 <option value="여행">여행</option>
-                <option value="문화,예술">문화,예술</option>
-                <option value="백화점">백화점</option>
             </select>
-        </div>
-        <input type="button" onclick="search()" id="searchBtn">
-    </div>
-    <div class="field" id="explain"></div>
-    <div id="core" class="row">
-        <div class="col-5">
-            <div class="map_wrap">
-                <div id="map" style="width:100%;height:100%;position:relative;overflow:hidden;"></div>
-                <div id="menu_wrap" class="bg_white">
-                    <ul id="placesList"></ul>
-                    <nav>
-                        <ul class="pager">
-                            <li><a href="#" onclick="prevPage();">Previous</a></li>
-                            <li><a href="#" onclick="nextPage();">Next</a></li>
-                        </ul>
-                    </nav>
+            <input type="button" onclick="search()" id="searchBtn">
+        </div><br>
+        
+        
+        <div id="core" class="row">
+            <div class="col-7">
+                <div class="map_wrap">
+                    <div id="map" style="width:100%;height:100%;position:relative;overflow:hidden;"></div>
+                    <div id="menu_wrap" class="bg_white">
+                        <ul id="placesList"></ul>
+                        <nav>
+                            <ul class="pager">
+                                <li><a href="#" onclick="prevPage();">Previous</a></li>
+                                <li><a href="#" onclick="nextPage();">Next</a></li>
+                            </ul>
+                        </nav>
+                    </div>
                 </div>
             </div>
+            <div id="kakao" class="col-5"><br><br><br><br><br><br><br><br><br><br>포인트를 클릭하면<br>장소 정보가 나옵니다.</div>
         </div>
-        <div id="kakao" class="col-7"><br><br><br><br><br><br><br><br><br><br>포인트를 클릭하면<br>장소 정보가 나옵니다.</div>
-    </div>
     <script type="text/javascript"
         src="//dapi.kakao.com/v2/maps/sdk.js?appkey=00f87dfc64daeb277224676ae0cf3f88&libraries=services"></script>
 
@@ -77,18 +87,21 @@
         var placeName;
         var source = document.getElementById("kakao").innerHTML;
         var myPlace = []
-        axios.get("http://127.0.0.1:8000/getMyPlace?id="+sessionStorage.getItem(sessionStorage.key(0)))
-                .then(resData => {
-                    if((resData.data).length!=0)myPlace=(resData.data).reduce((acc,cur,i)=>{acc.push(cur.sourceAsMap.place_name); return acc;},[])
-                }).catch(error =>{
-                    alert(error)
+        var myPlaceObj = []
+        axios.get("http://127.0.0.1:8000/getMyPlace?id=" + sessionStorage.getItem(sessionStorage.key(0)))
+            .then(resData => {
+                if ((resData.data).length != 0) myPlace = (resData.data).reduce((acc, cur, i) => { acc.push(cur.sourceAsMap.place_name); return acc; }, [])
+                myPlaceObj = resData.data;
+                console.log(myPlaceObj)
+            }).catch(error => {
+                //alert(error)
             })
 
 
         var mapContainer = document.getElementById('map');
-        mapContainer.style.width = '650px';
-        mapContainer.style.height = '600px';  // 지도를 표시할 div
-        mapContainer.style.paddingLeft = '10px';
+        mapContainer.style.width = '100%';
+        mapContainer.style.height = '100%';  // 지도를 표시할 div
+        // mapContainer.style.paddingLeft = '10px';
 
         var mapOption = {
             center: new kakao.maps.LatLng(37.543995256638, 126.991641147781), // 지도의 중심좌표
@@ -104,8 +117,9 @@
                         array.push(resData.data[i].sourceAsMap);
                     }
                 }
-                console.log(array);
-                if (getParameterByName("keyword") != null) {
+
+                //이거 왜??
+                if (getParameterByName("keyword") != "") {
                     document.getElementById("locationName").value = getParameterByName("keyword");
                     setTimeout(function () {
                         search();
@@ -121,7 +135,7 @@
                     if (endDate < element['post-date'].replace("-", "").replace("-", "")) {
                         endDate = element['post-date'].replace("-", "").replace("-", "");
                     }
-                    
+
                     displayMarker(element);
                 })
                 document.getElementById("explain").innerText =
@@ -151,23 +165,42 @@
 
             var content = document.createElement('div');
             content.classList.add("myOverlay");
-            content.innerHTML = 
-                        '    <span id="location" class="title">' + element.place_name + '  <input type="button" id="insta" onclick="window.open(' +
-                        '\'https://www.instagram.com/explore/tags/' + element.place_name.replace(' ', '') +
-                        '\')"></span>';
+            content.innerHTML =
+                '    <span id="location" class="title">' + element.place_name + '  <input type="button" id="insta" onclick="window.open(' +
+                '\'https://www.instagram.com/explore/tags/' + element.place_name.replace(' ', '') +
+                '\')"></span>';
             content.style.cssText = 'z-index: 99;';
             var saveBtn = document.createElement("INPUT");
-            (!myPlace.includes(element.place_name))?saveBtn.setAttribute("id", "noMyPlace"):saveBtn.setAttribute("id", "myPlace");
-            
+            (!myPlace.includes(element.place_name)) ? saveBtn.setAttribute("id", "noMyPlace") : saveBtn.setAttribute("id", "myPlace");
+
             saveBtn.setAttribute("type", "button");
-            saveBtn.onclick = function(){
-                let num = 0 ;
-                if(myPlace.includes(element.place_name)){
-                    alert('이미 저장된 장소입니다.')
-                }else{
+            saveBtn.onclick = function () {
+                let num = 0;
+                if (myPlace.includes(element.place_name)) {
+                    const deleteIdx = myPlaceObj.reduce((acc, cur, i) => {
+                        if (cur.sourceAsMap.place_name === element.place_name) acc.push(i); return acc;
+                    }, []);
+                    if (deleteIdx.length != 0) {
+                        for (let i = 0; i < deleteIdx.length; i++) {
+                            let dealing = true;
+                            axios.get("http://127.0.0.1:8000/deleteMyPlace?id=" + myPlaceObj[deleteIdx[i]].id)
+                                .then(resData => {
+                                    if (dealing) {
+                                        alert('삭제되었습니다');
+                                        saveBtn.setAttribute("id", "noMyPlace");
+                                        dealing = false;
+                                    }
+                                    const dIdx = myPlace.indexOf(element.place_name);
+                                    if (dIdx != -1) myPlace.splice(dIdx, 1);
+                                }).catch(error => {
+                                    console.log(error)
+                                })
+                        }
+                    }
+                } else {
                     axios.get("http://127.0.0.1:8000/getMaxNum")
                         .then(resData => {
-                            num=resData.data
+                            num = resData.data
                             axios.post("http://127.0.0.1:8000/saveLocationByUser?userId=" + sessionStorage.getItem(sessionStorage.key(0)) + "&esId=" + ++num + "&addressName=" + element.address_name + "&categoryGroupCode=" + element.category_group_code +
                                 "&categoryGroupName=" + element.category_group_name + "&categoryName=" + element.category_name + "&distance=" + element.distance + "&id=" + element.location_id +
                                 "&phone=" + element.phone + "&placeName=" + element.place_name + "&placeUrl=" + element.place_url + "&roadAddressName=" + element.road_address_name +
@@ -175,12 +208,19 @@
                                 .then(resData => {
                                     saveBtn.setAttribute("id", "myPlace")
                                     alert("저장되었습니다")
+                                    myPlace.push(element.place_name);
+                                    let tempObj = new Object();
+                                    tempObj["id"] = num;
+                                    tempMap = new Object();
+                                    tempMap["place_name"] = element.place_name;
+                                    tempObj["sourceAsMap"] = tempMap;
+                                    myPlaceObj.push(tempObj);
                                 })
                                 .catch(error => {
                                     console.log("비정상 응답 ", error);
                                     alert("저장에 실패했습니다")
-                            });
-                    })
+                                });
+                        })
                 }
             };
 
@@ -196,13 +236,13 @@
             overlay.setContent(content);
 
             daum.maps.event.addListener(marker, 'click', function () {
-                if(overlay.getMap() != null){
+                if (overlay.getMap() != null) {
                     overlay.setMap(null);
                     document.getElementById("kakao").innerHTML = source;
-                }else{
+                } else {
                     document.getElementById("kakao").innerHTML = '<iframe src="' + element.place_url.substring(0, element.place_url.indexOf("m/") + 2) + "m/" +
-                                element.place_url.substring(element.place_url.indexOf("m/") + 2, element.place_url.length) + '" width="600" height="600"></iframe>';
-                overlay.setMap(map);
+                        element.place_url.substring(element.place_url.indexOf("m/") + 2, element.place_url.length) + '" width="100%" height="100%"></iframe>';
+                    overlay.setMap(map);
                 }
             });
         }
@@ -210,106 +250,140 @@
 
         let lArray = [];
 
-        function search(location, date1, date2, category) {
-            page = -1;
-            if (document.getElementById("locationName").value == "") {
-                location = " ";
-            } else {
-                location = document.getElementById("locationName").value;
+        function getCategory(category){
+            let results = [];
+            if(category === '놀거리'){
+                results.push('문화');
+            }else if(category === '먹거리'){
+                results.push('음식점');
+            }else if(category === '카페'){
+                results.push('카페');
+            }else if(category ==='여행'){
+                results.push('여행');
+            }else if(category ===" "){
+                results.push(" ")
             }
-            if (document.getElementById("date1").value == "") {
-                date1 = 0;
-            } else {
-                date1 = document.getElementById("date1").value.replace("-", "").replace("-", "");
-            }
-            if (document.getElementById("date2").value == "") {
-                date2 = 30000000;
-            } else {
-                date2 = document.getElementById("date2").value.replace("-", "").replace("-", "");
-            }
-            if (document.getElementById('locationCategory').value == '전체보기') {
-                category = " ";
-            } else {
-                category = document.getElementById('locationCategory').value;
-            }
-
-            lArray = [];
-            array.forEach(element => {
-                if (element.road_address_name.includes(location)
-                    && date1 < element['post-date'].replace("-", "").replace("-", "")
-                    && date2 > element['post-date'].replace("-", "").replace("-", "")
-                    && element.category_name.includes(category)) {
-                    lArray.push(element);
-                }
-            });
-            console.log(lArray)
-
-            if (lArray.length == 0) {
-                alert("검색결과가 존재하지 않습니다")
-            } else {
-                var infowindow = new kakao.maps.InfoWindow({ zIndex: 1 });
-
-                // 페이지 번호를 표출합니다
-                //displayPagination(pagination);
-
-                var bounds = new kakao.maps.LatLngBounds();
-                document.getElementById('map').innerHTML = "<span></span>"
-                console.log('abc')
-                var mapContainer = document.getElementById('map'), // 지도를 표시할 div  
-
-                    mapOption = {
-                        center: new kakao.maps.LatLng(lArray[0].y, lArray[0].x), // 지도의 중심좌표
-                        level: 7 // 지도의 확대 레벨
-                    };
-
-                map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
-
-                // 마커 이미지의 이미지 주소입니다
-                var imageSrc = "http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
-
-                lArray.forEach(element => {
-                    displayMarker(element);
-                    // overlay.setMap(null);
-                })
-                nextPage()
-
-                var dateMonth = [01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12];
-                var date = new Date();
-                axios.post("http://127.0.0.1:8000/saveSearchInfo?memberId=" + sessionStorage.getItem(sessionStorage.key(0))
-                    + "&searchLocation=" + location + "&category=" + category + "&dateOfSearch=" + date.getFullYear()
-                    + dateMonth[date.getMonth()] + date.getDate())
-                    .then(resData => {
-                        console.log(resData);
-                    })
-                    .catch(error => {
-                        console.log("비정상 응답 ", error);
-                    });
-            }
+            return results;
         }
 
-        
+        function checkInclude(target, category) {
+            //alert(category)
+            for (let i = 0; i < category.length; i++) {
+                if (target.category_name.includes(category[i])) return true;
+            }
+            return false;
+        }
+
+        function search(location, date1, date2, category) {
+            page = -1;
+            // if (document.getElementById("locationName").value == ""
+            //     && document.getElementById("date1").value == ""
+            //     && document.getElementById("date2").value == ""
+            //     && document.getElementById('locationCategory').value == '전체보기') {
+            //         alert("최소1개의 검색설정이 필요합니다")
+            // } else {
+                if (document.getElementById("locationName").value == "") {
+                    location = " ";
+                } else {
+                    location = document.getElementById("locationName").value;
+                }
+                if (document.getElementById("date1").value == "") {
+                    date1 = 0;
+                } else {
+                    date1 = document.getElementById("date1").value.replace("-", "").replace("-", "");
+                }
+                if (document.getElementById("date2").value == "") {
+                    date2 = 30000000;
+                } else {
+                    date2 = document.getElementById("date2").value.replace("-", "").replace("-", "");
+                }
+                if (document.getElementById('locationCategory').value == '전체보기') {
+                    category = " ";
+                } else {
+                    category = document.getElementById('locationCategory').value;
+                }
+                lArray = [];
+                console.log(location)
+                console.log(date1)
+                console.log(date2)
+                console.log(category)
+                array.forEach(element => {
+                    if (element.road_address_name.includes(location)
+                        && date1 < element['post-date'].replace("-", "").replace("-", "")
+                        && date2 > element['post-date'].replace("-", "").replace("-", "")
+                        && checkInclude(element, getCategory(category))) {
+                        lArray.push(element);
+                    }
+                });
+
+                if (lArray.length == 0) {
+                    alert("검색결과가 존재하지 않습니다")
+                } else {
+                    var infowindow = new kakao.maps.InfoWindow({ zIndex: 1 });
+
+                    // 페이지 번호를 표출합니다
+                    //displayPagination(pagination);
+
+                    var bounds = new kakao.maps.LatLngBounds();
+                    document.getElementById('map').innerHTML = "<span></span>"
+                    var mapContainer = document.getElementById('map'), // 지도를 표시할 div  
+
+                        mapOption = {
+                            center: new kakao.maps.LatLng(lArray[0].y, lArray[0].x), // 지도의 중심좌표
+                            level: 7 // 지도의 확대 레벨
+                        };
+
+                    map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+
+                    // 마커 이미지의 이미지 주소입니다
+                    var imageSrc = "http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
+
+                    lArray.forEach(element => {
+                        displayMarker(element);
+                        // overlay.setMap(null);
+                    })
+                    nextPage()
+
+                    var dateMonth = [01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12];
+                    var date = new Date();
+                    axios.post("http://127.0.0.1:8000/saveSearchInfo?memberId=" + sessionStorage.getItem(sessionStorage.key(0))
+                        + "&searchLocation=" + location + "&category=" + category + "&dateOfSearch=" + date.getFullYear()
+                        + dateMonth[date.getMonth()] + date.getDate())
+                        .then(resData => {
+
+                        })
+                        .catch(error => {
+                            console.log("비정상 응답 ", error);
+                        });
+                }
+            // }
+
+        }
+
+
         function saveLocationByUser(place) {
-            let num = 0 ;
-            if(myPlace.includes(place)){
+            let num = 0;
+            if (myPlace.includes(place)) {
                 alert('이미 저장된 장소입니다.'
-            )}else{
+                )
+            } else {
                 axios.get("http://127.0.0.1:8000/getMaxNum")
                     .then(resData => {
-                        num=resData.data
+                        num = resData.data
                         //alert(resData)
                         axios.post("http://127.0.0.1:8000/saveLocationByUser?userId=" + sessionStorage.getItem(sessionStorage.key(0)) + "&esId=" + ++num + "&addressName=" + place.address_name + "&categoryGroupCode=" + place.category_group_code +
                             "&categoryGroupName=" + place.category_group_name + "&categoryName=" + place.category_name + "&distance=" + place.distance + "&id=" + place.location_id +
                             "&phone=" + place.phone + "&placeName=" + place.place_name + "&placeUrl=" + place.place_url + "&roadAddressName=" + place.road_address_name +
                             "&x=" + place.x + "&y=" + place.y + "&influencerName=" + place['insta-id'] + "&hashTagToString=" + place.hashtag + "&postDate=" + place['post-date'] + "&place=" + place.place)
                             .then(resData => {
-                                console.log(resData);
                                 alert("저장되었습니다")
+                                myPlace.push(element.place_name);
                             })
                             .catch(error => {
                                 console.log("비정상 응답 ", error);
                                 alert("저장에 실패했습니다")
-                        });
-                })
+                            });
+                    })
             }
 
 
@@ -331,14 +405,14 @@
                 for (let i = (page) * 15; i < (page) * 15 + 15; i++) {
                     index.push(i);
                 }
-            }else{
+            } else {
                 for (let i = (page) * 15; i < target.length; i++) {
                     index.push(i);
                 }
             }
 
             index.forEach((i) => {
-                
+
                 var content = document.createElement('div'),
                     tempH = document.createElement('h5'),
                     span1 = document.createElement('span'),
@@ -362,6 +436,15 @@
 
                 content.onclick = () => {
                     let element = target[i]
+
+                    let bounds = new kakao.maps.LatLngBounds();
+
+
+                    bounds.extend(new daum.maps.LatLng(element.y, element.x));
+
+                    map.setBounds(bounds);
+                    map.setLevel(map.getLevel() + 5);
+
                     var overlay = new daum.maps.CustomOverlay({
                         yAnchor: 3,
                         position: new daum.maps.LatLng(element.y, element.x)
@@ -369,23 +452,42 @@
 
                     var content = document.createElement('div');
                     content.classList.add('myOverlay');
-                    content.innerHTML = 
-                                '    <span id="location" class="title">' + element.place_name + '  <input type="button" id="insta" onclick="window.open(' +
-                                '\'https://www.instagram.com/explore/tags/' + element.place_name.replace(' ', '') +
-                                '\')"></span>';
+                    content.innerHTML =
+                        '    <span id="location" class="title">' + element.place_name + '  <input type="button" id="insta" onclick="window.open(' +
+                        '\'https://www.instagram.com/explore/tags/' + element.place_name.replace(' ', '') +
+                        '\')"></span>';
                     content.style.cssText = 'background: white;';
                     var saveBtn = document.createElement("INPUT");
-                    (!myPlace.includes(element.place_name))?saveBtn.setAttribute("id", "noMyPlace"):saveBtn.setAttribute("id", "myPlace");
-                    
+                    (!myPlace.includes(element.place_name)) ? saveBtn.setAttribute("id", "noMyPlace") : saveBtn.setAttribute("id", "myPlace");
+
                     saveBtn.setAttribute("type", "button");
-                    saveBtn.onclick = function(){
-                        let num = 0 ;
-                        if(myPlace.includes(element.place_name)){
-                            alert('이미 저장된 장소입니다.')
-                        }else{
+                    saveBtn.onclick = function () {
+                        let num = 0;
+                        if (myPlace.includes(element.place_name)) {
+                            const deleteIdx = myPlaceObj.reduce((acc, cur, i) => {
+                                if (cur.sourceAsMap.place_name === element.place_name) acc.push(i); return acc;
+                            }, []);
+                            if (deleteIdx.length != 0) {
+                                for (let i = 0; i < deleteIdx.length; i++) {
+                                    let dealing = true;
+                                    axios.get("http://127.0.0.1:8000/deleteMyPlace?id=" + myPlaceObj[deleteIdx[i]].id)
+                                        .then(resData => {
+                                            if (dealing) {
+                                                alert('삭제되었습니다');
+                                                saveBtn.setAttribute("id", "noMyPlace");
+                                                dealing = false;
+                                            }
+                                            const dIdx = myPlace.indexOf(element.place_name);
+                                            if (dIdx != -1) myPlace.splice(dIdx, 1);
+                                        }).catch(error => {
+                                            console.log(error)
+                                        })
+                                }
+                            }
+                        } else {
                             axios.get("http://127.0.0.1:8000/getMaxNum")
                                 .then(resData => {
-                                    num=resData.data
+                                    num = resData.data
                                     axios.post("http://127.0.0.1:8000/saveLocationByUser?userId=" + sessionStorage.getItem(sessionStorage.key(0)) + "&esId=" + ++num + "&addressName=" + element.address_name + "&categoryGroupCode=" + element.category_group_code +
                                         "&categoryGroupName=" + element.category_group_name + "&categoryName=" + element.category_name + "&distance=" + element.distance + "&id=" + element.location_id +
                                         "&phone=" + element.phone + "&placeName=" + element.place_name + "&placeUrl=" + element.place_url + "&roadAddressName=" + element.road_address_name +
@@ -393,12 +495,13 @@
                                         .then(resData => {
                                             saveBtn.setAttribute("id", "myPlace")
                                             alert("저장되었습니다")
+                                            myPlace.push(element.place_name);
                                         })
                                         .catch(error => {
                                             console.log("비정상 응답 ", error);
                                             alert("저장에 실패했습니다")
-                                    });
-                            })
+                                        });
+                                })
                         }
                     };
 
@@ -418,7 +521,7 @@
 
                 itemList.appendChild(content);
             })
-        
+
 
             return itemList;
 
@@ -433,7 +536,7 @@
                 var listEl = document.getElementById('placesList')
                 listEl.innerHTML = "<span></span>";
                 if (lArray.length === 0) {
-                    
+
                     listEl.appendChild(getItemList(array, page));
                 } else {
                     listEl.appendChild(getItemList(lArray, page));
@@ -447,7 +550,6 @@
             else if (lArray.length === 0 & ((page + 1) * 15 >= array.length)) {
                 alert('마지막 페이지입니다.')
             } else {
-                console.log(array.length,(page+1)*15)
                 page += 1
                 var listEl = document.getElementById('placesList')
                 listEl.innerHTML = "<span></span>";

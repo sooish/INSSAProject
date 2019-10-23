@@ -175,4 +175,14 @@ public class MapDetailRepository {
 		}
 	}
 
+	public void deleteMyPlace(String id) throws IOException {
+		RestHighLevelClient client = client();
+		try {
+			DeleteRequest request = new DeleteRequest("location-byuser", "_doc", id);
+			client.delete(request, RequestOptions.DEFAULT);
+		} finally {
+			client.close();
+		}
+	}
+
 }
