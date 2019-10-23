@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>키워드로 장소검색하기</title>
+
+</head>
+
+<body>
+    <input type="text" id="id">
+    <button onclick="drawMap()">검색</button><br>
+    <button onclick="getData()">추출</button>
+    <form action="saveLocation" method="GET">
+        <input type="hidden" name="v1">
+        <input type="hidden" name="v2">
+        <input type="hidden" name="v3">
+        <input type="hidden" name="v4">
+        <input type="hidden" name="v5">
+        <input type="hidden" name="v6">
+        <input type="hidden" name="v7">
+        <input type="hidden" name="v8">
+        <input type="hidden" name="v9">
+        <input type="hidden" name="v10">
+        <input type="hidden" name="v11">
+        <input type="hidden" name="v12">
+        <input type="hidden" name="v13">
+    </form>
+    <button onclick="saveData()">저장</button>
+    <div id="map" style="width:100%;height:350px;"></div>
+
+    <script type="text/javascript"
+        src="//dapi.kakao.com/v2/maps/sdk.js?appkey=00f87dfc64daeb277224676ae0cf3f88&libraries=services"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        // 마커를 클릭하면 장소명을 표출할 인포윈도우 입니다
+
+        var array = [];
+        function getData() {
+            axios.get("http://127.0.0.1:8000/load")
+                .then(resData => {
+                    console.log(resData.data);
+                    for (let i = 0; i < resData.data.length; i++) {
+                        // 장소 검색 객체를 생성합니다
+                        var ps = new kakao.maps.services.Places();
+                        var num = 0;
+                        ps.keywordSearch(resData.data[i].sourceAsMap.place, placesSearchCB);
+                        function placesSearchCB(data, status, pagination) {
+                            if (status === kakao.maps.services.Status.OK) {
+                                // influencerName, hashTagToString, postDate, place
+                                array.push(data[0]);
+                                array[num].esId = resData.data[i].id;
+                                num++;
+                            }
+                        }
+                    }
+
+                    console.log(array);
+                })
+                .catch(error => {
+                    console.log("비정상 응답 ", error);
+                });
+        }
+        function saveData() {
+            console.log(array[0].esId);
+            for (let i = 0; i < array.length; i++) {
+                sub = "saveLocation?esId=" + array[i].esId + "&addressName=" + array[i].address_name + "&categoryGroupCode=" + array[i].category_group_code +
+                    "&categoryGroupName=" + array[i].category_group_name + "&categoryName=" + array[i].category_name + "&distance=" + array[i].distance + "&id=" + array[i].id +
+                    "&phone=" + array[i].phone + "&placeName=" + array[i].place_name + "&placeUrl=" + array[i].place_url + "&roadAddressName=" + array[i].road_address_name +
+                    "&x=" + array[i].x + "&y=" + array[i].y;
+                axios.get("http://127.0.0.1:8000/" + sub)
+                    .then(resData => {
+                        console.log(123);
+                    })
+                    .catch(error => {
+                        console.log("비정상 응답 ", error);
+                    });
+            }
+        }
+    </script>
+</body>
+
+</html>

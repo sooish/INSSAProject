@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+<style>
+  body {
+    font-family: 'Lato', sans-serif;
+    margin: 0;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  
+  .btn {
+    cursor: pointer;
+  }
+
+  p {
+    font-size: 17px;
+    font-weight: 700;
+    text-align: center;
+  }
+
+
+  /* Overwrite default styles of hr */
+  hr {
+    border: 1px solid #f1f1f1;
+    margin-bottom: 25px;
+  }
+
+  img {
+    vertical-align: middle;
+
+  }
+
+  /* Position the image container (needed to position the left and right arrows) */
+  .container {
+    position: relative;
+  }
+
+  /* Hide the images by default */
+  .mySlides {
+    display: none;
+  }
+
+  /* Add a pointer when hovering over the thumbnail images */
+  .cursor {
+    cursor: pointer;
+  }
+
+  /* Next & previous buttons */
+  .prev {
+    cursor: pointer;
+    position: absolute;
+    top: 37%;
+    width: auto;
+    padding: 16px;
+    margin-top: -50px;
+    color: grey;
+    font-weight: bold;
+    font-size: 40px;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+    -webkit-user-select: none;
+    left: 0;
+    border-radius: 3px 0 0 3px;
+  }
+
+  .next {
+    cursor: pointer;
+    position: absolute;
+    top: 37%;
+    width: auto;
+    padding: 16px;
+    margin-top: -50px;
+    color: grey;
+    font-weight: bold;
+    font-size: 40px;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+    -webkit-user-select: none;
+    right: 0;
+    border-radius: 3px 0 0 3px;
+  }
+
+  /* Position the "next button" to the right */
+  .next {
+    right: 0;
+    border-radius: 3px 0 0 3px;
+  }
+
+  /* On hover, add a black background color with a little bit see-through */
+  .prev:hover,
+  .next:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+
+  /* Number text (1/5 etc) */
+  .numbertext1 {
+    color: black;
+    font-size: 16px;
+    padding: 8px 12px;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 300px;
+    text-align: center;
+    padding-top: 40px;
+  }
+
+  .numbertext2 {
+    color: black;
+    font-size: 16px;
+    padding: 8px 12px;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 300px;
+    text-align: center;
+    padding-top: 120px;
+  }
+
+  .numbertext3 {
+    color: black;
+    font-size: 16px;
+    padding: 8px 12px;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 300px;
+    text-align: center;
+    padding-top: 70px;
+  }
+
+  .numbertext4 {
+    color: black;
+    font-size: 16px;
+    padding: 8px 12px;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 300px;
+    text-align: center;
+    padding-top: 70px;
+  }
+
+  .numbertext5 {
+    color: black;
+    font-size: 16px;
+    padding: 8px 12px;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 300px;
+    text-align: center;
+    padding-top: 90px;
+  }
+
+  /* Container for image text */
+  .caption-container {
+    text-align: center;
+    background-color: #222;
+    padding: 2px 16px;
+    color: white;
+  }
+
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+
+  /* five columns side by side */
+  .column {
+    float: left;
+    width: 20%;
+  }
+
+  /* Add a transparency effect for thumnbail images */
+  .demo {
+    opacity: 0.6;
+  }
+
+  .active,
+  .demo:hover {
+    opacity: 1;
+  }
+</style>
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#headers").load("nav.html");
+    });
+</script>
+</head>
+<body>
+    <div id="headers"></div>
+    <br><br><br><br><br>
+  <h2 style="text-align:center">ABOUT inSSa-it</h2>
+  <p style="text-align:center">인싸이트는 다음과 같은 웹서비스입니다</p>
+  <hr>
+
+  <div class="container">
+    <div class="mySlides">
+      <div class="numbertext1">
+        <h3>비지니스적으로 inSSa-it </h3>
+        는, 대한민국의 트렌드를 선도하는 대표적 SNS 인스타그램의 여러 정보 중에서도<br>
+        '인싸', 즉 트랜드를 주도하는 인플루언서들의 장소 정보를<br>
+        선택적으로 제공하고자 만들어진 웹서비스입니다. <br> <br>
+        inSSa-it는 여러 SNS 유저 가운데 인플루언서를 선별하기 위해 <br>
+        인스타그램 인플루언서의 패션정보 제공 전문 사이트 하트잇(heart.it)이<br>
+        인스타그램에서 팔로우하는 약 180여개의 계정의 인플루언서들이 올린 <br>
+        수만 개 피드의 장소 정보에 기반하여 실시간 서비스를 제공합니다. <br><br>
+        이들 인플루언서는 패션을 필두로 다방면에서 트렌드를 세팅하는 오피니언 리더 집단으로서 <br>
+        이들의 장소 정보는 향후 중단기적 마켓 트렌드를 예측하는데 있어 <br>
+        개인과 기업 모두에게 소중한 자료로 활용될 수 있습니다.<br>
+      </div>
+      <img src="images/1.png" width=100% height=400px>
+    </div>
+
+    <div class="mySlides">
+      <div class="numbertext2">
+        <h3>기술적으로 inSSa-it </h3>
+        는, 하트잇 계정이 팔로우하는 180여개 계정의 회원데이터 / 장소데이터 / 해쉬태그 정보를 <br>
+        Selenium을 이용하여 정기적으로 수집함으로써 <br>
+        인플루언서들이 공유하고 싶어하는 핫플레이스들을<br>
+        실시간으로 만들어 제공해 드립니다.<br>
+        <br>
+        저희가 제공하는 '인플루언서 핫플레이스 지도' 및 '나만의 지도' 등의 서비스는 <br>
+        카카오 지도 API에 기반하며, 다음 플레이스와 연동됩니다.<br>
+      </div>
+      <img src="images/2.png" width=100% height=400px>
+    </div>
+
+    <div class="mySlides">
+      <div class="numbertext3">
+        <h3>인싸이트의 핵심 서비스 1</h3>
+        <br>
+        inSSa-it가 제공하는 첫번재 서비스는<br>
+        인플루언서들이 공유하고자 하는 핫플레이스를 지도로 제공하는 서비스입니다.<br>
+        유저들은 이 서비스를 통해 관심지역 / 인플루언서들의 방문기간 / 장소 카테고리 <br>
+        등의 범주에 따라 희망하는 조건에 부합하는 장소들을 검색할 수 있습니다.<br>
+        <br>
+        검색 결과를 클릭하시면 다음 플레이스 서비스와 연결되어 <br>
+        더욱 자세한 정보를 서비스 받으실 수 있습니다.<br>
+      </div>
+      <img src="images/3.png" width=100% height=400px>
+    </div>
+
+
+    <div class="mySlides">
+      <div class="numbertext4">
+        <h3>인싸이트의 핵심 서비스 2</h3>
+        <br>
+        inSSa-it가 제공하는두번재 서비스는<br>
+        자신만의 스타일로 완성해 가는 핫플레이스 지도입니다.<br>
+        <br>
+        인싸이트의 유저들은 인싸 핫플레이스 검색과 장소 저장을 통해 <br>
+        자신만의 스타일로 핫플레이스 지도를<br>
+        완성할 수 있습니다. <br>
+      </div>
+      <img src="images/2.png" width=100% height=400px>
+    </div>
+
+    <div class="mySlides">
+      <div class="numbertext5">
+        <h3>인싸이트의 핵심 서비스 3</h3>
+        <br>
+        inSSa-it가 제공하는 세번재 서비스는<br>
+        다양한 순위정보 제공 서비스입니다.<br>
+        <br>
+        인플루언서들이 방문한 핫프레이스 장소 탑5, <br>
+        인사이트 회원들이 자신의 핫플레이스로 검색한 장소 탑5,<br>
+        저장한 장소 탑5 등의 랭킹을 제공하여 <br>
+        더욱 효과적으로 장소 트렌드를 <br>
+        확인하고 예측하실 수 있도록 도와드립니다.<br>
+      </div>
+      <img src="images/1.png" width=100% height=400px>
+    </div>
+
+    <a class="prev" onclick="plusSlides(-1)">❮</a>
+    <a class="next" onclick="plusSlides(1)">❯</a>
+
+    <div class="caption-container">
+      <p id="caption"><a href="http://localhost:8000/signup.html"></a></p>
+    </div>
+
+    <div class="row">
+      <div class="column">
+          <img class="demo cursor" src="images/1.png" width="100%" height="120px" onclick="currentSlide(1)"
+            alt="비지니스 모델">
+      </div>
+      <div class="column">
+          <img class="demo cursor" src="images/2.png" width="100%" height="120px" onclick="currentSlide(2)"
+            alt="테크놀로지 모델">
+      </div>
+      <div class="column">
+          <img class="demo cursor" src="images/3.png" width="100%" height="120px" onclick="currentSlide(3)"
+            alt="<a href='http://localhost:8000/showMarker.html'>인플루언서 핫플레이스 지도페이지로 이동</a>">
+      </div>
+      <div class="column">
+          <img class="demo cursor" src="images/2.png" width="100%" height="120px" onclick="currentSlide(4)"
+            alt="<a href='http://localhost:8000/user.html'>나만의 핫플레이스 지도페이지로 이동</a>">
+      </div>
+      <div class="column">
+          <img class="demo cursor" src="images/1.png" width="100%" height="120px" onclick="currentSlide(5)"
+            alt="<a href='http://localhost:8000/ranking.html'>각종 랭킹페이지로 이동</a>">
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var slideIndex = 1;
+    showSlides(slideIndex);
+
+    function plusSlides(n) {
+      showSlides(slideIndex += n);
+    }
+
+    function currentSlide(n) {
+      showSlides(slideIndex = n);
+    }
+
+    function showSlides(n) {
+      var i;
+      var slides = document.getElementsByClassName("mySlides");
+      var dots = document.getElementsByClassName("demo");
+      var captionText = document.getElementById("caption");
+      if (n > slides.length) { slideIndex = 1 }
+      if (n < 1) { slideIndex = slides.length }
+      for (i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";
+      }
+      for (i = 0; i < dots.length; i++) {
+        dots[i].className = dots[i].className.replace(" active", "");
+      }
+      slides[slideIndex - 1].style.display = "block";
+      dots[slideIndex - 1].className += " active";
+      captionText.innerHTML = dots[slideIndex - 1].alt;
+    }
+  </script>
+
+</body>
+
+</html>

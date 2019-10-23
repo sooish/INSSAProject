@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Material Design Bootstrap</title>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+  <!-- Bootstrap core CSS -->
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <!-- Material Design Bootstrap -->
+  <link href="css/mdb.min.css" rel="stylesheet">
+  <!-- Your custom styles (optional) -->
+  <link href="css/style.min.css" rel="stylesheet">
+  <style>
+    .map-container {
+      overflow: hidden;
+      padding-bottom: 56.25%;
+      position: relative;
+      height: 0;
+    }
+
+    .map-container iframe {
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 100%;
+      position: absolute;
+    }
+
+    div.field,
+    select.box {
+      text-align: center;
+    }
+
+    div#core {
+      padding-left: 40px;
+      margin-bottom: 30px;
+      text-align: center;
+      font-size: 25px;
+    }
+
+    .customoverlay {
+      position: relative;
+      bottom: 85px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      border-bottom: 2px solid #ddd;
+      float: left;
+    }
+
+    .customoverlay:nth-of-type(n) {
+      border: 0;
+      box-shadow: 0px 1px 2px #888;
+    }
+
+    .customoverlay a {
+      display: block;
+      text-decoration: none;
+      color: #000;
+      text-align: center;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: bold;
+      overflow: hidden;
+      background: #d95050;
+      background: #d95050 url(http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/arrow_white.png) no-repeat right 14px center;
+    }
+
+    .customoverlay .title {
+      display: block;
+      text-align: center;
+      background: #fff;
+      margin-right: 35px;
+      padding: 10px 15px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .customoverlay:after {
+      content: '';
+      position: absolute;
+      margin-left: -12px;
+      left: 50%;
+      bottom: -12px;
+      width: 22px;
+      height: 12px;
+      background: url('http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')
+    }
+
+    .map_wrap,
+    .map_wrap * {
+      margin: 0;
+      padding: 0;
+      font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;
+      font-size: 12px;
+    }
+
+    .map_wrap a,
+    .map_wrap a:hover,
+    .map_wrap a:active {
+      color: #000;
+      text-decoration: none;
+    }
+
+    .map_wrap {
+      position: relative;
+      width: 100%;
+      height: 500px;
+    }
+
+    #menu_wrap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 250px;
+      margin: 10px 0 30px 10px;
+      padding: 5px;
+      overflow-y: auto;
+      background: rgba(255, 255, 255, 0.7);
+      z-index: 1;
+      font-size: 12px;
+      border-radius: 10px;
+    }
+
+    div.info {
+      background-color: rgba(255, 255, 255, 0.7);
+    }
+
+    #menu_wrap {
+      background: #fff;
+    }
+
+    #menu_wrap hr {
+      display: block;
+      height: 1px;
+      border: 0;
+      border-top: 2px solid #5F5F5F;
+      margin: 3px 0;
+    }
+
+    #menu_wrap .option {
+      text-align: center;
+    }
+
+    #menu_wrap .option p {
+      margin: 10px 0;
+    }
+
+    #menu_wrap .option button {
+      margin-left: 5px;
+    }
+
+    #placesList li {
+      list-style: none;
+    }
+
+    #placesList .item {
+      position: relative;
+      border-bottom: 1px solid #888;
+      overflow: hidden;
+      cursor: pointer;
+      min-height: 65px;
+    }
+
+    #placesList .item span {
+      display: block;
+      margin-top: 4px;
+    }
+
+    #placesList .item h5,
+    #placesList .item .info {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    #placesList .item .info {
+      padding: 10px 0 10px 55px;
+    }
+
+    #placesList .info .gray {
+      color: #8a8a8a;
+    }
+
+    #placesList .info .jibun {
+      padding-left: 26px;
+      background: url(http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_jibun.png) no-repeat;
+    }
+
+    #placesList .info .tel {
+      color: #009900;
+    }
+
+    #placesList .item .markerbg {
+      float: left;
+      position: absolute;
+      width: 36px;
+      height: 37px;
+      margin: 10px 0 0 10px;
+      background: url(http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png) no-repeat;
+    }
+
+    #placesList .item .marker_1 {
+      background-position: 0 -10px;
+    }
+
+    #placesList .item .marker_2 {
+      background-position: 0 -56px;
+    }
+
+    #placesList .item .marker_3 {
+      background-position: 0 -102px
+    }
+
+    #placesList .item .marker_4 {
+      background-position: 0 -148px;
+    }
+
+    #placesList .item .marker_5 {
+      background-position: 0 -194px;
+    }
+
+    #placesList .item .marker_6 {
+      background-position: 0 -240px;
+    }
+
+    #placesList .item .marker_7 {
+      background-position: 0 -286px;
+    }
+
+    #placesList .item .marker_8 {
+      background-position: 0 -332px;
+    }
+
+    #placesList .item .marker_9 {
+      background-position: 0 -378px;
+    }
+
+    #placesList .item .marker_10 {
+      background-position: 0 -423px;
+    }
+
+    #placesList .item .marker_11 {
+      background-position: 0 -470px;
+    }
+
+    #placesList .item .marker_12 {
+      background-position: 0 -516px;
+    }
+
+    #placesList .item .marker_13 {
+      background-position: 0 -562px;
+    }
+
+    #placesList .item .marker_14 {
+      background-position: 0 -608px;
+    }
+
+    #placesList .item .marker_15 {
+      background-position: 0 -654px;
+    }
+
+    #pagination {
+      margin: 10px auto;
+      text-align: center;
+    }
+
+    #pagination a {
+      display: inline-block;
+      margin-right: 10px;
+    }
+
+    #pagination .on {
+      font-weight: bold;
+      cursor: default;
+      color: #777;
+    }
+
+    div.container-fluid mt-5 {
+      margin-left: 30px;
+    }
+
+    div.pt-5 mx-lg-5 {
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body class="grey lighten-3">
+  <script type="text/javascript"
+    src="//dapi.kakao.com/v2/maps/sdk.js?appkey=00f87dfc64daeb277224676ae0cf3f88&libraries=services"></script>
+  <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=00f87dfc64daeb277224676ae0cf3f88"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script>
+    // 마커를 클릭하면 장소명을 표출할 인포윈도우 입니다
+
+    var array = [];
+    var startDate = 30000000;
+    var endDate = 0;
+    var placeName = "";
+
+    window.onload = function () {
+      getMap();
+    };
+
+    function getData() {
+      axios.get("http://127.0.0.1:8000/load")
+        .then(resData => {
+          console.log(resData.data);
+          for (let i = 0; i < resData.data.length; i++) {
+            // 장소 검색 객체를 생성합니다
+            var ps = new kakao.maps.services.Places();
+            var num = 0;
+            ps.keywordSearch(resData.data[i].sourceAsMap.place, placesSearchCB);
+            function placesSearchCB(data, status, pagination) {
+              if (status === kakao.maps.services.Status.OK) {
+                // influencerName, hashTagToString, postDate, place
+                array.push(data[0]);
+                array[num].esId = resData.data[i].id;
+                num++;
+              }
+            }
+          }
+          alert("추출이 완료되었습니다.");
+          console.log(array);
+        })
+        .catch(error => {
+          console.log("비정상 응답 ", error);
+        });
+    }
+    function saveData() {
+      console.log(array[0].esId);
+      for (let i = 0; i < array.length; i++) {
+        sub = "saveLocation?esId=" + array[i].esId + "&addressName=" + array[i].address_name + "&categoryGroupCode=" + array[i].category_group_code +
+          "&categoryGroupName=" + array[i].category_group_name + "&categoryName=" + array[i].category_name + "&distance=" + array[i].distance + "&id=" + array[i].id +
+          "&phone=" + array[i].phone + "&placeName=" + array[i].place_name + "&placeUrl=" + array[i].place_url + "&roadAddressName=" + array[i].road_address_name +
+          "&x=" + array[i].x + "&y=" + array[i].y;
+        axios.get("http://127.0.0.1:8000/" + sub)
+          .then(resData => {
+            console.log(123);
+          })
+          .catch(error => {
+            console.log("비정상 응답 ", error);
+          });
+      }
+      alert("저장 되었습니다.")
+    }
+
+    function getMap(loc) {
+      array = [];
+      placeNmae = loc;
+      var mapContainer = document.getElementById('map-container-google-2').innerHTML = "<span></span>"
+
+      axios.get("http://127.0.0.1:8000/getLocationInfo?indexName=core-info")
+        .then(resData => {
+          for (let i = 0; i < resData.data.length; i++) {
+            if (Object.keys(resData.data[i].sourceAsMap).includes("place_url")) {
+              array.push(resData.data[i].sourceAsMap);
+            }
+          }
+          console.log(array);
+          mapContainer = document.getElementById('map-container-google-2');
+          mapContainer.style.width = '1500px';
+          mapContainer.style.height = '600px';  // 지도를 표시할 div
+          mapContainer.style.paddingLeft = '10px';
+
+          mapOption = {
+            center: new kakao.maps.LatLng(37.543995256638, 126.991641147781), // 지도의 중심좌표
+            level: 7 // 지도의 확대 레벨
+          };
+          var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+
+          array.forEach(element => {
+
+            // 마커 이미지의 이미지 크기 입니다
+            var imageSize = new kakao.maps.Size(20, 30);
+
+            // 마커를 생성합니다
+            var marker = new kakao.maps.Marker({
+              map: map,
+              position: new kakao.maps.LatLng(element.y, element.x),
+              title: element.place_name,
+            });
+            var content = '<div class="customoverlay">' +
+              '  <a href="https://www.instagram.com/explore/tags/' + element.place_name + '" target="_blank">' +
+              '    <span id="location" class="title">' + element.place_name + '</span>' +
+              '  </a>' +
+              '    <a onclick="deleteMarker(' + "'" + element.place + "'" + ')"><span>삭제</span></a>' +
+              '</div>';
+
+            // 커스텀 오버레이가 표시될 위치입니다 
+            var position = new kakao.maps.LatLng(element.y, element.x);
+
+            // 커스텀 오버레이를 생성합니다
+            var overlay = new kakao.maps.CustomOverlay({
+              content: content,
+              map: map,
+              position: marker.getPosition()
+            });
+            if (element.place == placeName) {
+              marker.setMap(null);
+              overlay.setMap(null);
+            }
+            kakao.maps.event.addListener(marker, 'click', function (mouseEvent) {
+              if (overlay.getMap() == null) {
+                overlay.setMap(map);
+              } else {
+                overlay.setMap(null);
+                // marker.setMap(null);
+              }
+              console.log(element.place)
+              console.log("------")
+              console.log(placeName);
+
+            });
+            overlay.setMap(null);
+          })
+        })
+        .catch(error => {
+          console.log("비정상 응답 ", error);
+        });
+    }
+
+    function deleteMarker(loc) {
+      array = [];
+      var deleteArray = [];
+      var deleteKey = [];
+      placeName = loc;
+      console.log("=-=-=-=-=-=-")
+      console.log(placeName);
+      axios.get("http://127.0.0.1:8000/getLocationInfo?indexName=core-info")
+        .then(resData => {
+          console.log(resData);
+          for (let i = 0; i < resData.data.length; i++) {
+            if (Object.keys(resData.data[i].sourceAsMap).includes("place_url") && resData.data[i].sourceAsMap.place == placeName) {
+              deleteArray.push(resData.data[i].sourceAsMap);
+              deleteKey.push(resData.data[i].id)
+            }
+          }
+          console.log(deleteKey);
+          console.log(deleteArray);
+
+          for (let j = 0; j < deleteKey.length; j++) {
+            axios.get("http://127.0.0.1:8000/deleteLocation?id=" + deleteKey[j])
+              .then(resData => {
+                console.log("삭제완료")
+                getMap(placeName);
+              })
+              .catch(error => {
+                console.log("비정상 응답 ", error);
+              });
+          }
+        }).catch(error => {
+          console.log("비정상 응답 ", error);
+        });
+    }
+  </script>
+
+  <!--Main Navigation-->
+  <header>
+
+    <!-- Navbar -->
+
+    <!-- Navbar -->
+
+    <!-- Sidebar -->
+
+    <!-- Sidebar -->
+
+  </header>
+  <!--Main Navigation-->
+
+  <!--Main layout-->
+  <main class="pt-5 mx-lg-5" style="margin-right: 5%;">
+    <div class="container-fluid mt-5">
+
+      <!-- Heading -->
+      <div class="card mb-4 wow fadeIn">
+
+        <!--Card content-->
+        <div class="card-body d-sm-flex justify-content-between">
+
+          <h4 class="mb-2 mb-sm-0 pt-1">
+            <span>inSSa-it Dashboard</span>
+          </h4>
+
+          <div class="d-flex justify-content-center">
+            <!-- Default input -->
+            <button class="btn btn-primary btn-sm my-0 p"
+              onclick="location.href='getAndSave?id=apphj@naver.com&pw=rktbless&loopNum=10&targetDate=20191001'"> 크롤링
+            </button>
+            <button class="btn btn-primary btn-sm my-0 p" onclick="getData()"> 추출 </button>
+            <button class="btn btn-primary btn-sm my-0 p" onclick="saveData()"> 저장 </button>
+            <!-- <i class="fas fa-search"></i> -->
+          </div>
+
+        </div>
+
+      </div>
+      <!-- Heading -->
+
+      <!--Grid row-->
+      <div class="row wow fadeIn">
+
+        <!--Grid column-->
+        <div class="col-md-12 mb-4">
+
+          <!--Card-->
+          <div class="card">
+
+            <!--Card content-->
+            <div class="card-body">
+
+              <canvas id="myChart"></canvas>
+
+            </div>
+
+          </div>
+          <!--/.Card-->
+
+        </div>
+
+      </div>
+      <!--Grid row-->
+      <div class="row wow fadeIn">
+
+        <!--Grid column-->
+        <div class="col-lg-12 col-md-6 mb-4">
+
+          <!--Card-->
+          <div class="card">
+
+            <!-- Card header -->
+            <div class="card-header">Radar Chart</div>
+
+            <!--Card content-->
+            <div class="card-body">
+
+              <canvas id="radarChart"></canvas>
+
+            </div>
+
+          </div>
+          <!--/.Card-->
+
+        </div>
+        <!--Grid column-->
+
+        <!--Grid column-->
+        <div class="col-lg-12 col-md-6 mb-4">
+
+          <!--Card-->
+          <div class="card">
+
+            <!-- Card header -->
+            <div class="card-header">Doughnut Chart</div>
+
+            <!--Card content-->
+            <div class="card-body">
+
+              <canvas id="doughnutChart"></canvas>
+
+            </div>
+
+          </div>
+          <!--/.Card-->
+
+        </div>
+
+        <!--Grid column-->
+      </div>
+      <!--Grid row-->
+
+      <!--Grid row-->
+      <div class="row wow fadeIn">
+
+        <!--Grid column-->
+        <div class="col-md-12 mb-4">
+
+          <!--Card-->
+          <div class="card">
+
+            <!-- Card header -->
+            <div class="card-header">Google map</div>
+
+            <!--Card content-->
+            <div class="card-body">
+              <!--Google map-->
+              <div id="map-container-google-2" class="z-depth-1-half map-container" style="height: 500px">
+
+              </div>
+
+              <!--Google Maps-->
+
+            </div>
+
+          </div>
+          <!--/.Card-->
+
+        </div>
+        <!--Grid column-->
+
+      </div>
+      <!--Grid row-->
+
+    </div>
+  </main>
+  <!--Main layout-->
+
+  <!--Footer-->
+  <footer class="page-footer text-center font-small primary-color-dark darken-2 mt-4 wow fadeIn">
+
+    <!--Call to action-->
+    <div class="pt-4">
+      <a class="btn btn-outline-white" href="https://mdbootstrap.com/docs/jquery/getting-started/download/"
+        target="_blank" role="button">Download
+        MDB
+        <i class="fas fa-download ml-2"></i>
+      </a>
+      <a class="btn btn-outline-white" href="https://mdbootstrap.com/education/bootstrap/" target="_blank"
+        role="button">Start
+        free tutorial
+        <i class="fas fa-graduation-cap ml-2"></i>
+      </a>
+    </div>
+    <!--/.Call to action-->
+
+    <hr class="my-4">
+
+    <!-- Social icons -->
+    <div class="pb-4">
+      <a href="https://www.facebook.com/mdbootstrap" target="_blank">
+        <i class="fab fa-facebook-f mr-3"></i>
+      </a>
+
+      <a href="https://twitter.com/MDBootstrap" target="_blank">
+        <i class="fab fa-twitter mr-3"></i>
+      </a>
+
+      <a href="https://www.youtube.com/watch?v=7MUISDJ5ZZ4" target="_blank">
+        <i class="fab fa-youtube mr-3"></i>
+      </a>
+
+      <a href="https://plus.google.com/u/0/b/107863090883699620484" target="_blank">
+        <i class="fab fa-google-plus mr-3"></i>
+      </a>
+
+      <a href="https://dribbble.com/mdbootstrap" target="_blank">
+        <i class="fab fa-dribbble mr-3"></i>
+      </a>
+
+      <a href="https://pinterest.com/mdbootstrap" target="_blank">
+        <i class="fab fa-pinterest mr-3"></i>
+      </a>
+
+      <a href="https://github.com/mdbootstrap/bootstrap-material-design" target="_blank">
+        <i class="fab fa-github mr-3"></i>
+      </a>
+
+      <a href="http://codepen.io/mdbootstrap/" target="_blank">
+        <i class="fab fa-codepen mr-3"></i>
+      </a>
+    </div>
+    <!-- Social icons -->
+
+    <!--Copyright-->
+    <div class="footer-copyright py-3">
+      © 2019 Copyright:
+      <a href="https://mdbootstrap.com/education/bootstrap/" target="_blank"> MDBootstrap.com </a>
+    </div>
+    <!--/.Copyright-->
+
+  </footer>
+  <!--/.Footer-->
+
+  <!-- SCRIPTS -->
+  <!-- JQuery -->
+  <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
+  <!-- Bootstrap tooltips -->
+  <script type="text/javascript" src="js/popper.min.js"></script>
+  <!-- Bootstrap core JavaScript -->
+  <script type="text/javascript" src="js/bootstrap.min.js"></script>
+  <!-- MDB core JavaScript -->
+  <script type="text/javascript" src="js/mdb.min.js"></script>
+  <!-- Initializations -->
+  <script type="text/javascript">
+    // Animations initialization
+    new WOW().init();
+
+  </script>
+
+  <div id="ddd">
+
+  </div>
+
+  <!-- Charts -->
+  <script>
+    // Line
+    var valuesArray = [];
+    var countArray = [];
+    var labelArray = []
+    var dateMonth = [01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12];
+    var date = new Date();
+    var current = String(date.getFullYear()) + String(dateMonth[date.getMonth()]) + String(date.getDate());
+    for (let i = 0; i < 6; i++) {
+      countArray.push(Number(current) - i)
+    }
+    countArray.reverse();
+    countArray.forEach(element => {
+      labelArray.push(String(element).substring(0, 4) + "년 " + String(element).substring(4, 6) + "월 " + String(element).substring(6, 8) + "일");
+      axios.get("http://127.0.0.1:8000/count?DateOfSearch=" + element)
+        .then(resData => {
+          valuesArray.push(Number(resData.data));
+        })
+        .catch(error => {
+          console.log("비정상 응답 ", error);
+        });
+    });
+
+
+    // 
+    setTimeout(function () {
+      var ctx = document.getElementById("myChart").getContext('2d');
+      var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labelArray,
+          datasets: [{
+            label: '검색량 추이',
+            data: valuesArray,
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(54, 162, 235, 0.2)',
+              'rgba(255, 206, 86, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(153, 102, 255, 0.2)',
+              'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+              'rgba(255,99,132,1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: true
+              }
+            }]
+          }
+        }
+      });
+    }, 300);
+
+    axios.get("http://127.0.0.1:8000/getLocationInfo?indexName=core-info")
+      .then(resData => {
+        var vArray = [];
+        for (let i = 0; i < resData.data.length; i++) {
+          if (Object.keys(resData.data[i].sourceAsMap).includes("place_url")) {
+            vArray.push(resData.data[i].sourceAsMap);
+          }
+        }
+        var pieArray = [];
+        var pieTopFive = [];
+        var checked = [];
+        var maxNum = 0;
+        vArray.forEach((element) => {
+          if (element.road_address_name != "") {
+            if (checked.includes(element.road_address_name.split(" ")[1])) {
+              let index = checked.indexOf(element.road_address_name.split(" ")[1]);
+              pieArray[index].frequency += 1;
+            } else {
+              checked.push(element.road_address_name.split(" ")[1]);
+              pieArray.push({ 'text': element.road_address_name.split(" ")[1], 'frequency': 1 });
+            }
+          }
+          if (startDate > element['post-date'].replace("-", "").replace("-", "")) {
+            startDate = element['post-date'].replace("-", "").replace("-", "");
+          }
+          if (endDate < element['post-date'].replace("-", "").replace("-", "")) {
+            endDate = element['post-date'].replace("-", "").replace("-", "");
+          }
+        });
+        var sortingField = "frequency";
+        pieArray.sort(function (a, b) { // 내림차순
+          return b[sortingField] - a[sortingField];
+        });
+
+        //     for(let i =0; i <5 ; i++){
+        //       pieTopFive.push(pieArray[i]);
+        //     }
+        var cityArray = [];
+        var cityCount = [];
+        var colorArray = [];
+        pieArray.forEach((element) => {
+          cityArray.push(element.text);
+        })
+
+        pieArray.forEach((element) => {
+          cityCount.push(element.frequency);
+        })
+        console.log(cityArray)
+        console.log(cityCount)
+        //doughnut
+        pieArray.forEach(element => {
+          colorArray.push("#" + Math.round(Math.random() * 0xffffff).toString(16));
+        });
+
+        var ctxD = document.getElementById("doughnutChart").getContext('2d');
+        var myLineChart = new Chart(ctxD, {
+          type: 'doughnut',
+          data: {
+            labels: cityArray,
+            datasets: [{
+              data: cityCount,
+              backgroundColor: ["#FF0000", "#FF8800", "#FFE100", "#69FC00", "#00F9DC", "#0036F9", "#A500FF", "#FF0077"],
+              hoverBackgroundColor: ["#FF0000", "#FF8800", "#FFE100", "#69FC00", "#00F9DC", "#0036F9", "#A500FF", "#FF0077"]
+            }]
+          },
+          options: {
+            responsive: true
+          }
+        });
+      })
+      .catch(error => {
+        console.log("비정상 응답 ", error);
+      });
+
+
+    //radar
+    var ctxR = document.getElementById("radarChart").getContext('2d');
+    var myRadarChart = new Chart(ctxR, {
+      type: 'radar',
+      data: {
+        labels: ["Eating", "Drinking", "Sleeping", "Designing", "Coding", "Cycling", "Running"],
+        datasets: [{
+          label: "My First dataset",
+          data: [65, 59, 90, 81, 56, 55, 40],
+          backgroundColor: [
+            'rgba(105, 0, 132, .2)',
+          ],
+          borderColor: [
+            'rgba(200, 99, 132, .7)',
+          ],
+          borderWidth: 2
+        }, {
+          label: "My Second dataset",
+          data: [28, 48, 40, 19, 96, 27, 100],
+          backgroundColor: [
+            'rgba(0, 250, 220, .2)',
+          ],
+          borderColor: [
+            'rgba(0, 213, 132, .7)',
+          ],
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true
+      }
+    });
+
+
+
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,284 @@
+<html>
+
+<head>
+<meta charset="utf-8" />
+<link href="https://fonts.googleapis.com/css?family=Gothic+A1:100|Nanum+Gothic&display=swap&subset=korean" rel="stylesheet">
+<title>IN-SSAIT</title>
+</head>
+<style>
+body {
+	text-align: center;
+	margin: 0 auto;
+	font-family: 'Nanum Gothic', sans-serif;
+}
+
+.middleContainer {
+	width:100%;
+	padding: 0px;
+	background-color: white;
+	height: 450;
+	top: 110px;
+	position: fixed;
+}
+.middleContainer2{
+	width:100%;
+	padding: 0px;
+	background-color: white;
+	height: 50px;
+	top: 615px;
+	position: fixed;
+}
+
+
+.bottomContainer {
+	/* Fallback color */ background-color: gray;
+	opacity: 0.8;
+	color: white;
+	height: 57px;
+	width: 100%;
+	text-align: center;
+	background: black;
+	bottom: 0px;
+	position: fixed;
+	font-family: 'Nanum Gothic', sans-serif;
+}
+.topContainer{
+	position:fixed;
+	top:0px;
+	width: 100%;
+	height: 100px;
+	font-family: 'Nanum Gothic', sans-serif;
+}
+
+.topContainer a {
+	display: inline-block;
+	color: black;
+	text-align: center;
+	text-decoration: none;
+	border-radius: 5px;
+	width: 600px;
+	background-color: #ddd;
+	opacity:0.9;
+	padding: 10px;
+	font-size: 15px;
+	font-weight: 600;
+	font-family: 'Nanum Gothic', sans-serif;
+}
+
+.topContainer a:hover {
+	background-color: #ddd;
+	color: black;
+}
+
+
+.bt {
+	float: right;
+	margin: 10px;
+	font-size: 25px;
+	font-weight: 500;
+}
+
+.logobt:hover {
+	background-color: white;
+}
+.logo{
+	display: inline-block;
+	color: black;
+	text-align: center;
+	padding: 10px;
+	text-decoration: none;
+	border-radius: 5px;
+	width: 300px;
+	height: 100px;
+}
+table.table {
+    border-collapse: collapse;
+    text-align: center;
+    line-height: 1.3;
+    float: right;
+    margin-right: 170px;
+    font-family: 'Nanum Gothic', sans-serif;
+    
+
+}
+table.table thead th {
+    padding: 10px;
+    font-weight: bold;
+    vertical-align: top;
+    color: black;
+    border-bottom: 3px solid black;
+}
+table.table tbody th {
+    width: 150px;
+     padding: 10px; 
+    font-weight: bold;
+    vertical-align: top;
+    border-bottom: 1px solid #ccc;
+    background: white;
+}
+table.table td {
+    width: 130px;
+    padding: 10px;
+    vertical-align: top;
+    border-bottom: 1px solid #ccc;
+}
+
+span.anychart-credits-text{
+    display: none;
+}
+img.anychart-credits-logo{
+    display: none;
+}
+
+
+
+</style>
+
+<body>
+	<br>
+	<div class="topContainer">
+		<div class="logo"style="margin-left:100px;float: left;"><img src="/images/KakaoTalk_20191021_101409480.png" width="170px;"
+			height="50px"></div>
+			<a class="bt" style="width: 110;margin-right: 180px;"
+			href="http://localhost:8000/signup.html">회원가입</a> <a class="bt"
+			style="width: 110; margin-right: 20px;" href="http://localhost:8000/login.html">로그인</a>
+	</div>
+	
+	<br>
+	<br>
+	<div class="middleContainer">
+		<div id="middleContainerLeft" style="width: 800px; height:520px; top: 150px;  float: left;margin-left: 120px; "  >
+		</div>
+		<div id="middleContainerRight" style="width:600px; height:450px; top: 150px;  float: right; ">
+		</div>
+	</div>
+	<div class="middleContainer2">
+	<div style="width: 700px; height:50px; bottom: 40px;  float: left;margin-left: 120px; font-size: 10px;font-weight: 700;">
+	<br>　　　　　　　✔ 인플루언서들이 해당 지역에 해시태그를 많이 할수록 글자의 크기가 큽니다. 
+		</div>
+		<div  style="width:700px; height:50px; bottom: 40px;  float: right;font-size: 10px; font-weight: 700;">
+		<br>　　　　　✔ "Heart it"에서 팔로우 하고 있는 인플루언서의 팔로워 수 탑 10 계정입니다.
+		</div>
+	</div>
+	<div class="bottomContainer">
+		<div class="field" id="explain"></div>
+		<p style="font-size: 13px; width: 68%; float: left;">인스타그램은 전세계 월 10억명의 유저가 이용하는 SNS입니다.
+네이버의 자회사 "Heart it"은 국내 인스타그램 인플루언서들과 계약을 맺고 패션 사업을 합니다.<br>
+"inSSa-it"은 "Heart it"이 팔로우하는 인증된 인플루언서들의 해시태그와 장소태그를 수집 가공하여 인플루언서들의 "Hot Place"를 유저들에게 제공합니다.</p>
+<p style="float: right;width: 18%; font-size: 10px;">개인정보취급방침<br><br>
+copyright(c) (주)inSSa-it all rights reserved</p>
+	</div>
+
+	<script src="https://d3js.org/d3.v3.min.js"></script>
+	<script
+		src="https://rawgit.com/jasondavies/d3-cloud/master/build/d3.layout.cloud.js"
+		type="text/JavaScript"></script>
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<script
+		src="https://cdn.anychart.com/releases/v8/js/anychart-base.min.js"></script>
+	<script
+		src="https://cdn.anychart.com/releases/v8/js/anychart-tag-cloud.min.js"></script>
+
+	<script>
+        var startDate = 30000000;
+        var endDate = 0;
+        var data = [];
+
+
+        //===============================================================================
+        // 우측 중단 팔로워수 높은 순서로 탑 5명 나열하기
+        // 좌측에 워드클라우드가 어떻게 어떤정보를 차트화 한것 인지 직시할수 있는 설명
+        //getFindFollowings
+    axios.get("http://127.0.0.1:8000/getFindFollowings")
+            .then(resData => {
+     		console.log(resData.data[0]);
+             resData.data.forEach(element => {
+                document.getElementById("middleContainerRight").innerHTML = "<table class='table'>" + "<thead>" + "<tr>" 
+                + "<th scope='cols'>" + "인스타 아이디" + "</th>"+"<th scope='cols'>" + "팔로워" + "</th>" + "</tr>" + "</thead>"+"<tbody>"+"<tr>"+"<th scope='row'>"+ resData.data[0].instaId + "</th>"+ "<td>"+ String(resData.data[0].followings).replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,') +"명"+"</td>"+"</tr>"
+                + "<tr>"+"<th scope='row'>"+ resData.data[1].instaId + "</th>"+ "<td>"+ String(resData.data[1].followings).replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,') +"명"+ "</td>"+"</tr>"
+                + "<tr>"+"<th scope='row'>"+ resData.data[2].instaId + "</th>"+ "<td>"+ String(resData.data[2].followings).replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,') +"명"+ "</td>"+"</tr>"
+                + "<tr>"+"<th scope='row'>"+ resData.data[3].instaId + "</th>"+ "<td>"+ String(resData.data[3].followings).replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,') +"명"+ "</td>"+"</tr>"
+                + "<tr>"+"<th scope='row'>"+ resData.data[4].instaId + "</th>"+ "<td>"+ String(resData.data[4].followings).replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,') +"명"+ "</td>"+"</tr>"
+                + "<tr>"+"<th scope='row'>"+ resData.data[5].instaId + "</th>"+ "<td>"+ String(resData.data[5].followings).replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,') +"명"+ "</td>"+"</tr>"
+                + "<tr>"+"<th scope='row'>"+ resData.data[6].instaId + "</th>"+ "<td>"+ String(resData.data[6].followings).replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,') +"명"+ "</td>"+"</tr>"
+                + "<tr>"+"<th scope='row'>"+ resData.data[7].instaId + "</th>"+ "<td>"+ String(resData.data[7].followings).replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,') +"명"+ "</td>"+"</tr>"
+                + "<tr>"+"<th scope='row'>"+ resData.data[8].instaId + "</th>"+ "<td>"+ String(resData.data[8].followings).replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,') +"명"+ "</td>"+"</tr>"
+                + "<tr>"+"<th scope='row'>"+ resData.data[9].instaId + "</th>"+ "<td>"+ String(resData.data[9].followings).replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,') +"명"+ "</td>"+"</tr>"+"</tbody>"+"</table>";
+             });
+             //resData.data[0].instaId
+            })
+            .catch(error => {
+                console.log("비정상 응답 ", error);
+            });
+
+        //===============================================================================
+        // wordCloud Elastic Search로 위치정보 가져오기
+        axios.get("http://127.0.0.1:8000/getLocationInfo?indexName=core-info")
+            .then(resData => {
+                var vArray = [];
+                for (let i = 0; i < resData.data.length; i++) {
+                    if (Object.keys(resData.data[i].sourceAsMap).includes("place_url")) {
+                        vArray.push(resData.data[i].sourceAsMap);
+                    }
+                }
+
+                var keyArray = [];
+                var checked = [];
+                vArray.forEach((element) => {
+                    if (element.road_address_name != "") {
+                        if (checked.includes(element.road_address_name.split(" ")[1])) {
+                            let index = checked.indexOf(element.road_address_name.split(" ")[1]);
+                            keyArray[index].frequency += 1;
+                        } else {
+                            checked.push(element.road_address_name.split(" ")[1]);
+                            keyArray.push({ 'text': element.road_address_name.split(" ")[1], 'frequency': 1 });
+                        }
+                    }
+                    if (startDate > element['post-date'].replace("-", "").replace("-", "")) {
+                        startDate = element['post-date'].replace("-", "").replace("-", "");
+                    }
+                    if (endDate < element['post-date'].replace("-", "").replace("-", "")) {
+                        endDate = element['post-date'].replace("-", "").replace("-", "");
+                    }
+
+
+                });
+/*                 document.getElementById("explain").innerText =
+                    startDate.substring(0, 4) + "년" + startDate.substring(4, 6) + "월" + startDate.substring(6, 8) + "일부터 "
+                    + endDate.substring(0, 4) + "년" + endDate.substring(4, 6) + "월" + endDate.substring(6, 8) + "일까지의 지역 방문 빈도수를 바탕으로 그린 차트입니다.";
+                console.log(keyArray.length); */
+                anychart.onDocumentReady(function () {
+                   
+                    for (let i = 0; i < keyArray.length; i++) {
+                        data.push({ "x": "", "value": 0 });
+                    }
+                    for (let a = 0; a < keyArray.length; a++) {
+                        data[a].x = keyArray[a].text;
+                        data[a].value = keyArray[a].frequency;
+                  /*       console.log(keyArray[a].text);
+                        console.log(keyArray[a].frequency); */
+                    }
+                    console.log(drawWord(data));
+                    drawWord(data);
+                })
+            })
+            .catch(error => {
+                console.log("비정상 응답 ", error);
+            });
+        setInterval(function () {
+        	middleContainerLeft;
+        }, 3000);
+        
+        function drawWord(data) {
+            document.getElementById("middleContainerLeft").innerHTML = "<span></span>";
+            var chart = anychart.tagCloud(data);
+            // chart.title(subject + " 통합 가장 큰 고민거리")
+            chart.angles([0])
+            chart.container(document.getElementById("middleContainerLeft"));
+            chart.fontFamily("Nanum Gothic");
+            chart.draw();
+        }
+    </script>
+</body>
+
+</html>

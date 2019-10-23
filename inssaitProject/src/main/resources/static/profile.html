@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Insert title here</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link href="https://fonts.googleapis.com/css?family=Arvo|Baloo+Bhai|Bree+Serif|Cinzel|Gothic+A1|Jua|Nanum+Gothic|PT+Sans+Caption|Patua+One|Source+Serif+Pro&display=swap" rel="stylesheet">
+<style type="text/css">
+/* font-family: 'Baloo Bhai', cursive;
+font-family: 'Patua One', cursive;
+font-family: 'PT Sans Caption', sans-serif;
+font-family: 'Cinzel', serif;
+font-family: 'Bree Serif', serif;
+font-family: 'Source Serif Pro', serif;
+font-family: 'Arvo', serif; 
+font-family: 'Gothic A1', sans-serif;
+font-family: 'Jua', sans-serif;
+font-family: 'Nanum Gothic', sans-serif;*/
+body{
+   text-align: center;
+   font-family: 'Cinzel', serif;
+
+}
+.registerbtn {
+   position:absolute;
+  background-color: grey;
+  font-size:23px;
+  color: white;
+  top:20px;
+  right:10px;
+  width: 140px;
+  padding: 20px ;
+  border: none;
+  cursor: pointer;
+  opacity: 0.9;
+    -webkit-transition: all 0.4s;
+  -o-transition: all 0.4s;
+  -moz-transition: all 0.4s;
+  transition: all 0.4s;
+  font-family: 'Nanum Gothic', sans-serif;
+  border-radius: 80px;
+}
+.registerbtn:hover {
+  background-color: black;
+  color: white;
+}
+.profile{
+   text-align: center;
+}
+.w3-circle {
+   width:270px; 
+   height:270px;
+}
+.overlay {
+  position: absolute;
+  bottom: 5%;
+  right : 5%;
+  background: gray;
+  color: #f1f1f1; 
+  width: 90%;
+  height:130px;
+  transition: 1s ease;
+  opacity:0;
+  color: white;
+  font-size: 31px;
+  text-align: center;
+  border-radius: 20px;
+  display: block;
+  
+}
+.profile1:hover .overlay {
+  opacity: 1;
+}
+.profile2:hover .overlay {
+  opacity:1;
+}
+.profile3:hover .overlay {
+  opacity: 1;
+}
+.profile4:hover .overlay {
+  opacity: 1;
+}
+.profile5:hover .overlay {
+  opacity: 1;
+}
+.topContainer{
+   display: inline-block;
+   color: black;
+   text-align: center;
+   text-decoration: none;
+   width: 100%;
+   height: 130px;
+   font-size: 100px;
+   margin-top: 8px;
+}
+.profile{
+   width: 100%;
+   height: 200px;
+}
+.bottomContainer{
+   display:block;
+   font-size: 25px;
+   font-family: 'Nanum Gothic', sans-serif;
+}
+.block{
+  position: absolute;
+  bottom: 5%;
+  right : 5%;
+  background: white;
+  width: 90%;
+  height:130px;
+  opacity:0;
+  color: white;
+  border-radius: 20px;
+}
+
+</style>
+
+
+</head>
+<body >
+<div class="topContainer">
+<p class="topContainer">Saladbowl Team</p>
+</div><br><br><br><br><br><br>
+<div class="profile">
+<a class="profile1" href="https://github.com/happymwkang"><img class="w3-circle" src=/images/profileimg/StarLord.png><span class="overlay"><br>이미지를 click하면 강민웅님의 GitHub로 이동합니다.</span></a>
+<a class="profile2" href="https://github.com/sooish"><img class="w3-circle" src=/images/profileimg/Mantis.jpg><span class="overlay"><br>이미지를 click하면 김수경님의 GitHub로 이동합니다.</span></a>
+<a class="profile3" href="https://github.com/angle2v"><img class="w3-circle" src=/images/profileimg/BlackPanther.jpg><span class="overlay"><br>이미지를 click하면 김웅태님의 GitHub로 이동합니다.</span></a>
+<a class="profile4" href="https://github.com/SEJSCloud"><img class="w3-circle" src=/images/profileimg/rocket.jpg><span class="overlay"><br>이미지를 click하면 김종성님의 GitHub로 이동합니다.</span></a>
+<a class="profile5" href="https://github.com/SunggookCHOI"><img class="w3-circle" src=/images/profileimg/Loki.jpg><span class="overlay"><br>이미지를 click하면 최성국님의 GitHub로 이동합니다.</span></a>
+</div>
+<br><br><br><br><br><br>
+<button class="registerbtn" onclick="location.href='http://localhost:8000/login.html'">메인화면 돌아가기</button>
+<div class="bottomContainer">
+  <br>
+<p class="bottomContainer">샐러드는 하나로 섞여 조화를 이루면서도 각 재료의 특징을 명확하게 알 수 있습니다.<br>
+"Saladbowl Team"은 팀원들 서로가 조화를 이루되 각각의 고유한 모습을 그대로 유지한다는 특징을 갖습니다.</p>
+<div class="block"></div>
+</div>
+</body>
+</html>

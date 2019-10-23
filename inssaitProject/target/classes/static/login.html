@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
+<style>
+body {
+  font-family: 'Lato', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Add padding to containers */
+.container {
+  padding: 12px;
+  background-color: white;
+  text-align: center;
+  width: 900px;
+  margin: 0 auto;
+}
+
+/* Full-width input fields */
+input[type=text], input[type=password], input[type=date] {
+  width: 100%;
+  padding: 13px;
+  margin: 3px 0 3px 0;
+  display: inline-block;
+  border: none;
+  background: #f1f1f1;
+  text-align: center;
+}
+
+input[type=text]:focus, input[type=password]:focus, input[type=date]:focus {
+  background-color: #ddd;
+  outline: none;
+  text-align: center;
+}
+
+/* Overwrite default styles of hr */
+hr {
+  border: 1px solid #f1f1f1;
+  margin-bottom: 25px;
+}
+
+/* Set a style for the submit button */
+.registerbtn {
+  background-color: grey   ;
+  color: white;
+  padding: 15px ;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  opacity: 0.9;
+    -webkit-transition: all 0.4s;
+  -o-transition: all 0.4s;
+  -moz-transition: all 0.4s;
+  transition: all 0.4s;
+}
+
+.registerbtn:hover {
+  opacity: 1;
+}
+p{
+font-size: 17px;
+font-weight: 700;
+}
+
+</style>
+</head>
+<body>
+
+   
+  <div class="container">
+  <form action="login2" method = "post">
+    <h2>LOG IN</h2>
+    <p>인싸의 세계로 들어가고 싶다면, 로그인하세요!!</p>
+    <hr>
+   <img src="images/about.png"; background-size: 600px; height: 500px; margin: auto;"> <br>
+   <br>
+ 
+
+    <label for="memberId"><b>아이디</b></label>
+    <input type="text" placeholder="아이디를 입력하세요" name="memberId"  required>
+
+    <label for="pw"><b>비밀번호</b></label>
+    <input type="password" placeholder="비밀번호를 입력하세요" name="pw"  required>
+    <br>
+    <br>
+   <button type="submit" class="registerbtn">로그인</button>　
+      <button class="registerbtn" onclick="location.href='http://localhost:8000/signup.html'">가입하기</button>
+    </form>
+  </div>
+  
+</body>
+</html>

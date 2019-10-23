@@ -1,0 +1,124 @@
+/*----------------------------------------------------
+@File: Default Styles
+@Author: Rocky
+@URL: http://wethemez.com
+Author E-mail: rockybd1995@gmail.com
+
+This file contains the styling for the actual theme, this
+is the file you need to edit to change the look of the
+theme.
+---------------------------------------------------- */
+
+/*=====================================================================
+@Template Name: Bitmap
+@Author: Rocky
+@Developed By: Rocky
+@Developer URL: http://rocky.wethemez.com
+Author E-mail: rockybd1995@gmail.com
+
+@Default Styles
+
+Table of Content:
+01/ Variables
+02/ predefin
+03/ header
+04/ button
+05/ banner
+06/ breadcrumb
+07/ about
+08/ team
+09/ project 
+10/ price 
+11/ team 
+12/ blog 
+13/ video  
+14/ features  
+15/ career  
+16/ contact 
+17/ footer
+
+=====================================================================*/ 
+
+/*----------------------------------------------------*/
+@import "variables";
+/*---------------------------------------------------- */ 
+
+/*----------------------------------------------------*/
+@import "predefine";
+/*---------------------------------------------------- */
+
+/*----------------------------------------------------*/
+@import "header";
+/*---------------------------------------------------- */
+
+/*----------------------------------------------------*/
+@import "breadcrumb";
+/*---------------------------------------------------- */
+
+/*----------------------------------------------------*/
+@import "button";
+/*---------------------------------------------------- */
+
+/*----------------------------------------------------*/
+@import "gallery";
+/*---------------------------------------------------- */
+
+/*----------------------------------------------------*/
+@import "testimonials";
+/*---------------------------------------------------- */
+
+/*----------------------------------------------------*/
+@import "service";
+/*---------------------------------------------------- */
+
+/*----------------------------------------------------*/
+@import "instagram";
+/*---------------------------------------------------- */
+
+/*----------------------------------------------------*/
+@import "blog";
+/*---------------------------------------------------- */
+
+/*----------------------------------------------------*/
+@import "contact";
+/*---------------------------------------------------- */
+
+/*----------------------------------------------------*/
+@import "elements";
+/*---------------------------------------------------- */
+
+/*----------------------------------------------------*/
+@import "footer";
+/*---------------------------------------------------- */
+
+.sidebar-fixed {
+  height: 100vh;
+  width: 270px;
+  -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  z-index: 1050;
+  background-color: #fff;
+  padding: 1.5rem;
+  padding-top: 0; }
+  .sidebar-fixed .list-group .active {
+    -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+    -webkit-border-radius: 5px;
+    border-radius: 5px; }
+  .sidebar-fixed .logo-wrapper {
+    padding: 2.5rem; }
+    .sidebar-fixed .logo-wrapper img {
+      max-height: 50px; }
+
+@media (min-width: 1200px) {
+  .navbar,
+  .page-footer,
+  main {
+    padding-left: 270px; } }
+
+@media (max-width: 1199.98px) {
+  .sidebar-fixed {
+    display: none; } }
+
+
+

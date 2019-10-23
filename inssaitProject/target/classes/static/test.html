@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>지도 정보 얻어오기</title>
+    
+</head>
+<body>
+<input type="text" id="a1">
+<input type="text" id="a2">
+<input type="text" id="a3">
+<input type="text" id="a4">
+<button onclick="getAndSave()">클릭</button>
+<div id="a5"></div>
+    
+<script>
+    function getAndSave(){
+    	console.log(document.getElementById("a1").value);
+    	console.log(document.getElementById("a2").value);
+    	console.log(document.getElementById("a3").value);
+    	console.log(document.getElementById("a4").value);
+        document.getElementById("a5").innerHTML = "<span><a href='http://localhost:8000/getAndSave?id=apphj@naver.com&pw=rktbless&loopNum=10&targetDate=20191001'>테스트</a></span>";
+    }
+</script>
+</body>
+</html>

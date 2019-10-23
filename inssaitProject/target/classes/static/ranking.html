@@ -1,0 +1,345 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#headers").load("nav.html");
+        });
+    </script>
+    <style>
+        div#user {
+            padding-left: 80px;
+        }
+
+        a.tooltips {
+            position: relative;
+            display: inline;
+        }
+
+        a.tooltips span {
+            position: absolute;
+            width: 140px;
+            color: #FFFFFF;
+            background: #000000;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            display: none;
+            border-radius: 6px;
+        }
+
+        a.tooltips span:after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -8px;
+            width: 0;
+            height: 0;
+            border-top: 8px solid #000000;
+            border-right: 8px solid transparent;
+            border-left: 8px solid transparent;
+        }
+
+        a:hover.tooltips span {
+            display: block;
+            opacity: 0.8;
+            bottom: 30px;
+            left: 50%;
+            margin-left: -76px;
+            z-index: 999;
+        }
+        div.col-4{
+            text-align: center;
+        }
+        div.fi{
+            font-size: 30px;
+        }
+        span.ti{
+            font-size: 10px;
+        }
+        span.oi{
+            font-size: 15px;
+        }
+    </style>
+</head>
+
+<body>
+        
+    <div id="headers"></div>
+    <br><br><br><br><br>
+    <div class="row">
+        <div id="influencer" class="col-4">
+            <h3>인싸 핫플레이스 TOP 5</h3><span class="ti">✔인플루언서들의 피드에 등록된 방문 장소 상위 5곳입니다</span><br><br>
+        </div>
+        <div id="searchInfo" class="col-4">
+            <h3>나만의 핫플레이스 검색 TOP 5</h3><span class="ti">✔인사이트 유저들이 나만의 핫플레이스로 검색한 장소 상위 5곳입니다</span><br><br>
+        </div>
+        <div id="user" class="col-4">
+            <h3>나만의 핫플레이스 등록 TOP 5</h3><span class="ti">✔인사이트 유저들이 나만의 핫플레이스로 등록한 장소 상위 5곳입니다</span><br><br>
+        </div>
+    </div>
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <script src="https://rawgit.com/jasondavies/d3-cloud/master/build/d3.layout.cloud.js"
+        type="text/JavaScript"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        var sources1;
+        var sources2;
+        var sources3;
+        var keyArray1 = [];
+        var keyArray2 = [];
+        var keyArray3 = [];
+        var user1 = "user1"
+        var influencer1 = "influencer1";
+        var array;
+        var placeName;
+        axios.get("http://127.0.0.1:8000/getLocationInfo?indexName=location-byuser")
+            .then(resData => {
+                var vArray = [];
+                for (let i = 0; i < resData.data.length; i++) {
+                    vArray.push(resData.data[i].sourceAsMap);
+                }
+                console.log(vArray)
+
+
+                var checked = [];
+                var num = 0;
+                vArray.forEach((element) => {
+                    if (checked.includes(element.place_name)) {
+                        let index = checked.indexOf(element.place_name);
+                        keyArray1[index].frequency += 1;
+                    } else {
+                        checked.push(element.place_name);
+                        keyArray1.push({ element, "frequency": 1 });
+                    }
+                })
+                var sortingField = "frequency";
+                keyArray1.sort(function (a, b) { // 내림차순
+                    return b[sortingField] - a[sortingField];
+                });
+                console.log(keyArray1)
+                for (var i = 0; i < 5; i++) {
+                    if(i == 0){
+                        document.getElementById("user").innerHTML += "<div class='fi'>"
+                        + "<h4><img src='/images/gold.png' width='60px;' height='60px;'>" + (i + 1) + "등" + "</h4>";
+                    }else if(i == 1){
+                        document.getElementById("user").innerHTML += "<div class='fi'>"
+                        + "<h4><img src='/images/silver.png' width='60px;' height='60px;'>" + (i + 1) + "등" + "</h4>";
+                    }else if(i == 2){
+                        document.getElementById("user").innerHTML += "<div class='fi'>"
+                        + "<h4><img src='/images/bronze.png' width='60px;' height='60px;'>" + (i + 1) + "등" + "</h4>";
+                    }else{
+                        document.getElementById("user").innerHTML += "<div class='fi'>"
+                        + "<h4>" + (i + 1) + "등" + "</h4>";
+                    }
+                        document.getElementById("user").innerHTML += "<span class='oi'>" + keyArray1[i].element.place_name + "<br>"
+                        + keyArray1[i].element.road_address_name + "<br>"
+                        + keyArray1[i].element.phone + "<br></span>"
+                        + "<a class='tooltips' href='javascript:void(0);' onclick='showIframe(" + user1 + ", " + i + ")'><img src='/images/kakaoMap2.jpg' width='38px;' height='34px;'><span>카카오플레이스 보기</span></a>"
+                        + "<a class='tooltips' href='https://www.instagram.com/explore/tags/" + keyArray1[i].element.place_name + "' target='_blank'><img src='/images/instagram.svg' width='40px;' height='34px;'><span>인스타그램으로 연결</span></a>"
+                        + "<a class='tooltips' href='javascript:void(0);' onclick='saveLocationByUser(" + user1 + ", " + i + ")'><img src='/images/star.png' width='40px;' height='38px;'><span>MyPlace로 저장하기</span></a>"
+                        + "<br><hr><br>"
+                        + "</div>"
+                }
+                sources3 = document.getElementById("user").innerHTML;
+            })
+            .catch(error => {
+                console.log("비정상 응답 ", error);
+            });
+
+        axios.get("http://127.0.0.1:8000/getLocationInfo?indexName=core-info")
+            .then(resData => {
+                var vArray = [];
+                for (let i = 0; i < resData.data.length; i++) {
+                    if (Object.keys(resData.data[i].sourceAsMap).includes("place_url")) {
+                        vArray.push(resData.data[i].sourceAsMap);
+                    }
+                }
+                array = vArray;
+                console.log(vArray)
+
+                var checked = [];
+                var num = 0;
+                vArray.forEach((element) => {
+                    if (checked.includes(element.place_name)) {
+                        let index = checked.indexOf(element.place_name);
+                        keyArray2[index].frequency += 1;
+                    } else {
+                        checked.push(element.place_name);
+                        keyArray2.push({ element, "frequency": 1 });
+                    }
+                })
+                var sortingField = "frequency";
+                keyArray2.sort(function (a, b) { // 내림차순
+                    return b[sortingField] - a[sortingField];
+                });
+                console.log(keyArray2)
+
+                for (var i = 0; i < 5; i++) {
+                    if(i == 0){
+                        document.getElementById("influencer").innerHTML += "<div class='fi'>"
+                        + "<h4><img src='/images/gold.png' width='60px;' height='60px;'>" + (i + 1) + "등" + "</h4>";
+                    }else if(i == 1){
+                        document.getElementById("influencer").innerHTML += "<div class='fi'>"
+                        + "<h4><img src='/images/silver.png' width='60px;' height='60px;'>" + (i + 1) + "등" + "</h4>";
+                    }else if(i == 2){
+                        document.getElementById("influencer").innerHTML += "<div class='fi'>"
+                        + "<h4><img src='/images/bronze.png' width='60px;' height='60px;'>" + (i + 1) + "등" + "</h4>";
+                    }else{
+                        document.getElementById("influencer").innerHTML += "<div class='fi'>"
+                        + "<h4>" + (i + 1) + "등" + "</h4>";
+                    }
+                        document.getElementById("influencer").innerHTML +="<span class='oi'>" +  keyArray2[i].element.place_name + "<br>"
+                        + keyArray2[i].element.road_address_name + "<br>"
+                        + keyArray2[i].element.phone + "<br></span>"
+                        + "<a class='tooltips' href='javascript:void(0);' onclick='showIframe(" + influencer1 + ", " + i + ")'><img src='/images/kakaoMap2.jpg' width='38px;' height='34px;'><span>카카오플레이스 보기</span></a>"
+                        + "<a class='tooltips' href='https://www.instagram.com/explore/tags/" + keyArray2[i].element.place_name + "' target='_blank'><img src='/images/instagram.svg' width='40px;' height='34px;'><span>인스타그램으로 연결</span></a>"
+                        + "<a class='tooltips' href='javascript:void(0);' onclick='saveLocationByUser(" + influencer1 + ", " + i + ")'><img src='/images/star.png' width='40px;' height='38px;'><span>MyPlace로 저장하기</span></a>"
+                        + "<br><hr><br>"
+                        + "</div>"
+                }
+                sources1 = document.getElementById("influencer").innerHTML;
+            })
+            .catch(error => {
+                console.log("비정상 응답 ", error);
+            });
+
+        axios.get("http://127.0.0.1:8000/getSearchInfo")
+            .then(resData => {
+                var vArray = [];
+                console.log(resData)
+                resData.data.forEach(element => {
+                    vArray.push(element);
+                });
+
+                console.log(vArray)
+
+                var checked = [];
+                var num = 0;
+                vArray.forEach((element) => {
+                    if (checked.includes(element.searchLocation)) {
+                        let index = checked.indexOf(element.searchLocation);
+                        keyArray3[index].frequency += 1;
+                    } else {
+                        checked.push(element.searchLocation);
+                        keyArray3.push({ element, "frequency": 1 });
+                    }
+                })
+                var sortingField = "frequency";
+                keyArray3.sort(function (a, b) { // 내림차순
+                    return b[sortingField] - a[sortingField];
+                });
+                console.log(keyArray3)
+                for (var i = 0; i < 5; i++) {
+                    if(i == 0){
+                        document.getElementById("searchInfo").innerHTML += "<div class='fi'>"
+                        + "<h4><img src='/images/gold.png' width='60x;' height='60px;'>" + (i + 1) + "등" + "</h4>";
+                    }else if(i == 1){
+                        document.getElementById("searchInfo").innerHTML += "<div class='fi'>"
+                        + "<h4><img src='/images/silver.png' width='60x;' height='60px;'>" + (i + 1) + "등" + "</h4>";
+                    }else if(i == 2){
+                        document.getElementById("searchInfo").innerHTML += "<div class='fi'>"
+                        + "<h4><img src='/images/bronze.png' width='60x;' height='60px;'>" + (i + 1) + "등" + "</h4>";
+                    }else{
+                        document.getElementById("searchInfo").innerHTML += "<div class='fi'>"
+                        + "<h4>" + (i + 1) + "등" + "</h4>";
+                    }
+                        document.getElementById("searchInfo").innerHTML +="<span class='oi'>" +  keyArray3[i].element.searchLocation + "</span><br><br><br>"
+                        + "<a class='tooltips' href=showMarker.html?keyword=" + keyArray3[i].element.searchLocation + "><img src='/images/icons/search.svg' width='40px;' height='38px;'><span>키워드로 검색해보기</span></a>"
+                        + "<hr><br>"
+                        + "</div>"
+                }
+                sources2 = document.getElementById("searchInfo").innerHTML;
+            })
+            .catch(error => {
+                console.log("비정상 응답 ", error);
+            });
+        var num = 0;
+        function showIframe(name, i) {
+            if (name == "user1") {
+                if (document.getElementById("searchInfo").innerHTML.includes("iframe") && num == i) {
+                    console.log(123)
+                    document.getElementById("influencer").innerHTML = sources1;
+                    document.getElementById("searchInfo").innerHTML = sources2;
+                    document.getElementById("user").innerHTML = sources3;
+                } else {
+                    num = i;
+                    document.getElementById("influencer").innerHTML = sources3;
+                    document.getElementById("searchInfo").innerHTML = '<iframe src="' + keyArray1[i].element.place_url.substring(0, keyArray1[i].element.place_url.indexOf("m/") + 2) + "m/" +
+                        keyArray1[i].element.place_url.substring(keyArray1[i].element.place_url.indexOf("m/") + 2, keyArray1[i].element.place_url.length) + '" width="800" height="1000"></iframe>';
+                    document.getElementById("user").innerHTML = "<span></span>"
+                }
+            } else if (name == "influencer1") {
+                if (document.getElementById("searchInfo").innerHTML.includes("iframe") && num == i) {
+                    document.getElementById("searchInfo").innerHTML = sources2;
+                    document.getElementById("user").innerHTML = sources3;
+                } else {
+                    num = i;
+                    document.getElementById("searchInfo").innerHTML = '<iframe src="' + keyArray2[i].element.place_url.substring(0, keyArray2[i].element.place_url.indexOf("m/") + 2) + "m/" +
+                        keyArray2[i].element.place_url.substring(keyArray2[i].element.place_url.indexOf("m/") + 2, keyArray2[i].element.place_url.length) + '" width="800" height="1000"></iframe>';
+                    document.getElementById("user").innerHTML = "<span></span>"
+                }
+            }
+        }
+
+        function saveLocationByUser(name2, a) {
+            axios.get("http://127.0.0.1:8000/getLocationInfo?indexName=location-byuser")
+                .then(resData => {
+                    if (name2 == "user1") {
+                        placeName = keyArray1[a].element.place_name;
+                    } else {
+                        placeName = keyArray2[a].element.place_name;
+                    }
+                    var elasticArray = [];
+                    var num = 0;
+                    resData.data.forEach(element => {
+                        elasticArray.push(element.sourceAsMap);
+                        if (num < Number(element.id)) {
+                            num = Number(element.id);
+                        }
+                    });
+                    num = num + 1;
+                    var result = false;
+                    let uArray = [];
+                    elasticArray.forEach(element => {
+                        if (element.userId == sessionStorage.getItem(sessionStorage.key(0)) && element.place_name.includes(placeName)) {
+                            placeName = "";
+                        }
+                    });
+                    array.forEach(element => {
+                        if (placeName == element.place_name) {
+                            uArray = element;
+                            result = true;
+                        }
+                    });
+                    if (result == true) {
+                        console.log(uArray)
+                        axios.post("http://127.0.0.1:8000/saveLocationByUser?userId=" + sessionStorage.getItem(sessionStorage.key(0)) + "&esId=" + num + "&addressName=" + uArray.address_name + "&categoryGroupCode=" + uArray.category_group_code +
+                            "&categoryGroupName=" + uArray.category_group_name + "&categoryName=" + uArray.category_name + "&distance=" + uArray.distance + "&id=" + uArray.location_id +
+                            "&phone=" + uArray.phone + "&placeName=" + uArray.place_name + "&placeUrl=" + uArray.place_url + "&roadAddressName=" + uArray.road_address_name +
+                            "&x=" + uArray.x + "&y=" + uArray.y + "&influencerName=" + uArray['insta-id'] + "&hashTagToString=" + uArray.hashtag + "&postDate=" + uArray['post-date'] + "&place=" + uArray.place)
+                            .then(resData => {
+                                console.log(resData);
+                                alert("저장되었습니다")
+                            })
+                            .catch(error => {
+                                console.log("비정상 응답 ", error);
+                                alert("저장에 실패했습니다")
+                            });
+                    } else {
+                        alert("이미저장되었습니다")
+                    }
+                })
+                .catch(error => {
+                    console.log("비정상 응답 ", error);
+                });
+        }
+    </script>
+</body>
+
+</html>
