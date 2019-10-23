@@ -30,12 +30,14 @@ Elastic Search
 
 ```
 * RDBMS : Oracle
-* NoSQL : Elastic Search, Kibana
-* Back End Development Languages : Spring Boot / Java / / SQL
+* NoSQL : Elastic Search 
+* Back End Development Languages : Java / SQL
 * Front End Development Language : Java Script / HTML / CSS
-* Libraries : Lombok, Google Chart 
-* Tools : Maven / Eclipse 
-* Additional technical set : Ajax
+* Libraries : Lombok / Google Chart / Any Chart / Kakao Map api
+* Framework : Bootstrap / Spring Boot
+* Tools : Eclipse / Visual Studio Code / Kibana / PostMan / GitHub / SourceTree
+* Plug-in : Maven
+* Additional technical set : axios
 ```
 
 # How to run it
