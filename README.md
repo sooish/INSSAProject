@@ -56,7 +56,7 @@ Elastic Search
 # Images
 
 <div>
-<img src="https://user-images.githubusercontent.com/51253930/67360627-67b58580-f5a1-11e9-9bfe-2705c300a55b.pngg" width="90%"></img>
+<img src="https://user-images.githubusercontent.com/51253930/67360627-67b58580-f5a1-11e9-9bfe-2705c300a55b.png" width="90%"></img>
 <img src="https://user-images.githubusercontent.com/51253930/67360632-6a17df80-f5a1-11e9-9b07-c9fb9f426c55.png" width="90%"></img> 
 </div>
  
