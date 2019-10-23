@@ -86,10 +86,16 @@
     </script>
 </head>
 
-<body>
-    <div id="headers"></div>
-    <br><br><br><br><br>
-    <div class="field" id="user"></div><br><br>
+        <body>
+                <div id="headers"></div>
+                <br><br><br><br><br>
+                <div class="field" id="user"></div>
+                <br>
+                <p style="text-align:center">        
+                나만의 스타일로 완성해 가는 핫플레이스 지도입니다.<br>
+              인싸 핫플레이스 검색과 장소 저장을 통해 자신만의 스타일로 핫플레이스 지도를 완성할 수 있습니다. <br></p>
+                <hr>
+    <br><br>
     <div class="field" id="explain"></div>
     <div id="core" class="row">
         <div id="map" style="width:60%;height:350px;margin : 0 auto;" class="col-6"></div>
@@ -104,7 +110,7 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
-        document.getElementById("user").innerText = sessionStorage.getItem(sessionStorage.key(0)) + "님의 MyPlace 정보입니다.";
+        document.getElementById("user").innerText = sessionStorage.getItem(sessionStorage.key(0)) + "님의 나만의 핫플레이스 지도";
         var array = [];
         var userArray = [];
         var placeName;
