@@ -181,8 +181,8 @@
                         if (cur.sourceAsMap.place_name === element.place_name) acc.push(i); return acc;
                     }, []);
                     if (deleteIdx.length != 0) {
+                        let dealing = true;
                         for (let i = 0; i < deleteIdx.length; i++) {
-                            let dealing = true;
                             axios.get("http://127.0.0.1:8000/deleteMyPlace?id=" + myPlaceObj[deleteIdx[i]].id)
                                 .then(resData => {
                                     if (dealing) {
@@ -303,10 +303,6 @@
                     category = document.getElementById('locationCategory').value;
                 }
                 lArray = [];
-                console.log(location)
-                console.log(date1)
-                console.log(date2)
-                console.log(category)
                 array.forEach(element => {
                     if (element.road_address_name.includes(location)
                         && date1 < element['post-date'].replace("-", "").replace("-", "")
@@ -468,8 +464,8 @@
                                 if (cur.sourceAsMap.place_name === element.place_name) acc.push(i); return acc;
                             }, []);
                             if (deleteIdx.length != 0) {
+                                let dealing = true;
                                 for (let i = 0; i < deleteIdx.length; i++) {
-                                    let dealing = true;
                                     axios.get("http://127.0.0.1:8000/deleteMyPlace?id=" + myPlaceObj[deleteIdx[i]].id)
                                         .then(resData => {
                                             if (dealing) {
